@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust Pictures | Cinematic Stories That Leave A Lasting Impression</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons API -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables */
+        
+        :root {
+            --bg-dark: #000000;
+            --bg-card: rgba(20, 20, 20, 0.65);
+            --text-main: #ffffff;
+            --text-muted: #a3a3a3;
+            --text-dark: #000000;
+            --border-color: rgba(255, 255, 255, 0.15);
+            --font-main: 'Inter', sans-serif;
+            --accent: #ffffff;
+            --spacing-lg: 100px;
+        }
+
+        /* Scrollbar styling */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) #000000;
+        }
+
+        *::-webkit-scrollbar {
+            width: 10px; /* Width of the vertical scrollbar */
+            height: 10px; /* Height of the horizontal scrollbar */              
+        }
+
+        *::-webkit-scrollbar-track {
+            background: #000000; /* Matches the global dark background */
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            border: 3px solid #000000; /* Creates padding effect by showing the track color around the thumb */
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(255, 255, 255, 0.45); /* Highlights slightly when hovered */
+        }
+
+        /* Cursor Bug Fix */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        input,
+        textarea {
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        html {
+            background-color: #000000;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: transparent;
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            background-color: #000000;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* Typography */
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-family: var(--font-main);
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--text-dark);
+            border: 1px solid var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--accent);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Smart Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 85px; /* Locks the navbar height */
+            padding: 0 5%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .nav-hidden {
+            transform: translateY(-100%);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            height: 40px; /* Prevents the 200px image from pushing the navbar taller */
+            overflow: visible;
+        }
+
+        .logo img {
+            height: 150px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+            pointer-events: none; /* Prevents transparent PNG padding from blocking clicks below the navbar */
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Global Modal Overlay */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #modal-overlay.show {
+            opacity: 1;
+        }
+
+        .modal-box {
+            width: 90%;
+            max-width: 720px;
+            max-height: 86vh;
+            background: #111;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.95);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        #modal-overlay.show .modal-box {
+            transform: translateY(0);
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 36px 40px;
+        }
+
+        .modal-card-image {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-image: linear-gradient(135deg, #2b2b2b 0%, #111111 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.45);
+            font-weight: 600;
+            margin-bottom: 1.75rem;
+            overflow: hidden;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+        }
+
+        .modal-body h3 {
+            font-size: 2rem;
+            margin-bottom: 1.1rem;
+            line-height: 1.25;
+        }
+
+        .modal-body p {
+            color: var(--text-muted);
+            margin-bottom: 1.4rem;
+            line-height: 1.8;
+            font-size: 0.96rem;
+        }
+
+        .modal-sticky {
+            position: sticky;
+            bottom: 0;
+            background: rgba(17, 17, 17, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 18px 40px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Layout Utility */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-lg) 5%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 0 5%;
+            overflow: hidden;
+        }
+
+        .hero-video-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .hero-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 65%, rgba(0, 0, 0, 0.95) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 950px;
+        }
+
+        #hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 600;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            letter-spacing: -0.03em;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        #hero p {
+            font-size: 1.1rem;
+            color: #d1d5db;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 4rem;
+        }
+
+        .scroll-indicator-wrap {
+            position: absolute;
+            bottom: 2.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+
+        .scroll-pill {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.6rem 1.4rem;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .scroll-text {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 2.5px;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 35px;
+            background: linear-gradient(to bottom, #ffffff, rgba(255, 255, 255, 0.2));
+            animation: scrollPulse 2.2s infinite ease-in-out;
+        }
+
+        @keyframes scrollPulse {
+            0%,
+            100% {
+                transform: scaleY(0.65);
+                opacity: 0.35;
+            }
+
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        /* About Section */
+        .crew-flex {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.5rem 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .crew-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            border: 1px solid var(--border-color);
+            object-fit: cover;
+            display: block;
+            background-color: #151515; /* Fallback color while the image loads */
+        }
+
+        .crew-member {
+            width: calc(25% - 1.5rem);
+            min-width: 210px;
+            text-align: center;
+            padding: 1.8rem 1.2rem;
+            border-radius: 16px;
+            background: rgba(15, 15, 15, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, filter 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, background-color 0.4s ease;
+        }
+
+        .crew-flex:has(.crew-member:hover) .crew-member {
+            opacity: 0.35;
+            filter: blur(2px);
+        }
+
+        .crew-flex .crew-member:hover,
+        .crew-member.spotlight-active {
+            opacity: 1 !important;
+            filter: blur(0px) !important;
+            transform: scale(1.05) translateY(-10px);
+            background: rgba(26, 26, 26, 0.85);
+            border-color: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.9), 0 0 35px 2px rgba(255, 255, 255, 0.14);
+        }
+
+        .crew-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            border: 1px solid var(--border-color);
+            background-image: radial-gradient(circle at 35% 35%, #444, #151515);
+        }
+
+        .crew-member h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .crew-member .role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .crew-member p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Portfolio Tabs (Fixed Pill Overflow) */
+        .tab-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0 4rem;
+        }
+
+        .tab-menu {
+            background: rgba(30, 30, 30, 0.6);
+            padding: 6px;
+            border-radius: 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+            border: 1px solid var(--border-color);
+            min-width: 320px;
+        }
+
+        .tab-btn {
+            padding: 12px 44px;
+            z-index: 2;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        .tab-active {
+            color: #000;
+        }
+
+        .tab-pill {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            height: calc(100% - 12px);
+            width: calc(50% - 6px);
+            background: #ffffff;
+            border-radius: 50px;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1;
+        }
+
+        /* Portfolio Grids */
+        .grid-container {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .grid-container.active {
+            display: grid;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .films-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.2rem;
+            perspective: 1200px;
+        }
+
+        .film-card {
+            background: rgba(18, 18, 18, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transform-style: preserve-3d;
+            transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .film-card:hover {
+            border-color: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.95), 0 0 35px rgba(255, 255, 255, 0.1);
+        }
+
+        .film-img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            transform: translateZ(20px);
+            background-image: linear-gradient(135deg, #2b2b2b 0%, #111111 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+        }
+
+        .film-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            transform: translateZ(35px);
+        }
+
+        .film-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.8rem;
+        }
+
+        .film-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .film-content p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .film-actions {
+            display: flex;
+            gap: 1rem;
+            transform: translateZ(30px);
+        }
+
+        .film-actions .btn {
+            flex: 1;
+            padding: 0.85rem 0;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 960px) {
+            .films-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .crew-member {
+                width: calc(50% - 1.5rem);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .films-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .crew-member {
+                width: 100%;
+            }
+        }
+
+        /* Achievements & iOS Slot Wheel Roller */
+
+        .achievement-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            display: block;
+            background-color: #151515; /* Fallback color while loading */
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 4rem 0;
+            text-align: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .stat-item h3 {
+            font-size: 4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.15;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wheel-stat {
+            display: inline-flex;
+            align-items: center;
+            height: 1.15em;
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+        }
+
+        .wheel-col {
+            display: inline-flex;
+            flex-direction: column;
+            height: 1.15em;
+            will-change: transform;
+            transform: translateY(0);
+        }
+
+        .wheel-digit {
+            height: 1.15em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.15em;
+        }
+
+        .wheel-static {
+            display: inline-flex;
+            align-items: center;
+            height: 1.15em;
+        }
+
+        .stat-item p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .latest-achievement {
+            border-top: 1px solid var(--border-color);
+            padding-top: 3rem;
+            margin-top: 2rem;
+        }
+
+        .achievement-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .achievement-header h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .achievement-img {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #181818 0%, #0c0c0c 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border-color);
+            letter-spacing: 4px;
+        }
+
+        /* Testimonials Carousel with Spotlight & Dynamic Downward Expansion */
+        #testimonials {
+            position: relative;
+            z-index: 15;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            margin-top: 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            z-index: 20;
+        }
+
+        .carousel-viewport {
+            overflow-x: clip;
+            overflow-y: visible;
+            width: 100%;
+            padding: 1.5rem 0.5rem;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 1.8rem;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+            align-items: flex-start;
+        }
+
+        .carousel-card {
+            flex: 0 0 calc(33.333% - 1.2rem);
+            position: relative;
+            height: 280px;
+            cursor: pointer;
+            z-index: 1;
+            transition: opacity 0.4s ease, filter 0.4s ease;
+        }
+
+        .carousel-card-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 280px;
+            border: 1px solid var(--border-color);
+            padding: 2.2rem;
+            border-radius: 16px;
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            transition: border-color 0.35s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, background-color 0.35s ease;
+        }
+
+        /* Dim & blur sibling testimonial cards when one is hovered */
+        .carousel-track:has(.carousel-card:hover) .carousel-card:not(:hover) {
+            opacity: 0.35;
+            filter: blur(2.5px);
+        }
+
+        .carousel-card:hover {
+            z-index: 60;
+        }
+
+        .carousel-card:hover .carousel-card-inner {
+            border-color: rgba(255, 255, 255, 0.45);
+            background: rgba(24, 24, 24, 0.96);
+            transform: translateY(-8px);
+            box-shadow: 0 28px 60px rgba(0, 0, 0, 0.95), 0 0 35px 2px rgba(255, 255, 255, 0.14);
+        }
+
+        .test-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .test-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #444, #222);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+        }
+
+        .test-info h5 {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .test-info p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .test-quote {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-main);
+        }
+
+        /* Dynamic downward expansion container */
+        .test-more {
+            display: grid;
+            grid-template-rows: 0fr;
+            opacity: 0;
+            transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, margin-top 0.35s ease;
+            margin-top: 0;
+        }
+
+        .test-more-inner {
+            overflow: hidden;
+            color: #d4d4d4;
+            font-size: 0.92rem;
+            line-height: 1.7;
+        }
+
+        .carousel-card:hover .test-more {
+            grid-template-rows: 1fr;
+            opacity: 1;
+            margin-top: 0.85rem;
+        }
+
+        .carousel-arrow {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(18, 18, 18, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        .carousel-arrow:hover {
+            background: #ffffff;
+            color: #000000;
+            transform: scale(1.1);
+        }
+
+        .carousel-arrow-left {
+            margin-right: 1.2rem;
+        }
+
+        .carousel-arrow-right {
+            margin-left: 1.2rem;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-top: 2.5rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            border: none;
+            cursor: pointer;
+            transition: all 0.35s ease;
+        }
+
+        .carousel-dot.active {
+            background: #ffffff;
+            width: 32px;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 1024px) {
+            .carousel-card {
+                flex: 0 0 calc(50% - 0.9rem);
+            }
+        }
+
+        @media (max-width: 680px) {
+            .carousel-card {
+                flex: 0 0 100%;
+            }
+
+            .carousel-arrow {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Blog Section */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .blog-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .blog-img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            background-image: linear-gradient(135deg, #222, #111);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+            align-items: center;
+        }
+
+        .blog-meta .tag {
+            border: 1px solid var(--border-color);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .blog-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .blog-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 900px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer & CTA */
+        #cta {
+            text-align: center;
+            padding: var(--spacing-lg) 5%;
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.85), transparent);
+            position: relative;
+            z-index: 1;
+        }
+
+        #cta .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 5% 2rem;
+            background-color: rgba(5, 5, 5, 0.9);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+        }
+
+        .footer-left p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 1.5rem 0;
+            max-width: 300px;
+        }
+
+        .footer-contact div {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .contact-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .contact-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            color: var(--text-main);
+            border-radius: 8px;
+            font-family: var(--font-main);
+            transition: border-color 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .contact-form textarea {
+            height: 150px;
+            resize: none;
+        }
+
+        .contact-form button {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--accent);
+            color: var(--text-dark);
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            nav .nav-links,
+            nav .btn {
+                display: none;
+            }
+        }
+
+        /* Utilities */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-indicator-wrap.reveal {
+            transform: translateX(-50%) translateY(20px);
+        }
+
+        .scroll-indicator-wrap.reveal.active {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 3D Pure Black Volumetric Smoke Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Smart Navbar -->
+    <nav id="navbar">
+        <a href="#hero" class="logo">
+        <img src="./assets/Logo/WP Logo (1).png" alt="Wanderlust Pictures Logo">
+        </a>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#films">Portfolio</a></li>
+            <li><a href="#achievements">Achievements</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#blog">Blog</a></li>
+        </ul>
+        <!-- Redirects directly to the pre-footer (#cta) section -->
+        <a href="#cta" class="btn btn-primary">Let's Create</a>
+    </nav>
+
+    <!-- Global Modal Overlay -->
+    <div id="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-body" id="modal-content">
+                <!-- Dynamically populated via JS -->
+            </div>
+            <div class="modal-sticky" id="modal-actions">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. Hero Section -->
+    <section id="hero">
+        <div class="hero-video-wrapper">
+            <video class="hero-video" autoplay muted loop playsinline src="./assets/hero-bg.mp4"></video>
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <span class="section-label reveal">AWARD-WINNING FILM PRODUCTION</span>
+            <h1 class="reveal">Cinematic Stories That<br>Leave A Lasting<br>Impression</h1>
+            <p class="reveal">We craft meaningful films, documentaries and visual stories that<br>inspire, connect and
+                travel beyond borders.</p>
+            <div class="hero-buttons reveal">
+                <a href="#films" class="btn btn-primary">View Our Work</a>
+                <a href="#about" class="btn btn-outline">Meet the Team</a>
+            </div>
+        </div>
+        <div class="scroll-indicator-wrap reveal">
+            <div class="scroll-pill">
+                <span class="scroll-text">SCROLL NOW</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. About Section -->
+    <section id="about" class="container text-center">
+        <span class="section-label reveal">OUR PEOPLE</span>
+        <h2 class="section-title reveal">About Wanderlust Pictures</h2>
+        <p class="section-subtitle reveal">Founded in 2024, Wanderlust Pictures is an independent film
+            production<br>studio dedicated to creating stories that transcend boundaries.</p>
+
+        <div class="crew-flex reveal">
+            <div class="crew-member">
+                <img src="./assets/Member photos/Sithum.jpeg" alt="Sithum Machadio" class="crew-img">
+                <h4>Sithum Machado</h4>
+                <span class="role">FOUNDER & DIRECTOR</span>
+                <p>Leading the company's creative vision and directing productions.</p>
+            </div>
+            <div class="crew-member">
+                <img src="./assets/Member photos/Venuja.jpeg" alt="Venuja Weerawardhana" class="crew-img">
+                <h4>Venuja Weerawardhana</h4>
+                <span class="role">EDITOR & VIDEOGRAPHER</span>
+                <p>Transforming raw footage into compelling stories through editing.</p>
+            </div>
+            <div class="crew-member">
+                <img src="./assets/Member photos/Abhishek.jpeg" alt="M. Abishek" class="crew-img">
+                <h4>M. Abishek</h4>
+                <span class="role">LEAD DESIGNER & DIRECTOR</span>
+                <p>Ensuring every production maintains a strong visual identity.</p>
+            </div>
+            <div class="crew-member">
+                <img src="./assets/Member photos/Chapa.jpeg" alt="Chapa Bandara" class="crew-img">
+                <h4>Chapa<br>Bandara</h4>
+                <span class="role">PRODUCTION MANAGER</span>
+                <p>Coordinates production operations, schedules, and logistics.</p>
+            </div>
+            <div class="crew-member">
+                <img src="./assets/Member photos/Charuni.jpeg" alt="Charuni Nayanthara" class="crew-img">
+                <h4>Charuni<br>Nayanthara</h4>
+                <span class="role">WRITER</span>
+                <p>Develops engaging stories, screenplays, and creative concepts.</p>
+            </div>
+            <div class="crew-member">
+                <img src="./assets/Member photos/Daham.jpg" alt="Daham Dissanayake" class="crew-img">
+                <h4>Daham<br>Dissanayake</h4>
+                <span class="role">DIRECTOR OF PHOTOGRAPHY</span>
+                <p>Captures cinematic visuals and oversees camera work.</p>
+            </div>
+            <div class="crew-member">
+                <img src="./assets/Member photos/Buddhi.jpeg" alt="Buddhi Jayasundara" class="crew-img">
+                <h4>Buddhi<br>Jayasundara</h4>
+                <span class="role">PHOTOGRAPHER</span>
+                <p>Documents productions through professional photography.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Portfolio Section (Tabs Integrated) -->
+    <section id="films" class="container">
+        <div class="text-center">
+            <span class="section-label reveal">PORTFOLIO</span>
+
+            <!-- Dynamic Tab Switcher -->
+            <div class="tab-wrapper reveal">
+                <div class="tab-menu" id="tab-menu">
+                    <div class="tab-pill" id="pill"></div>
+                    <div class="tab-btn tab-active" onclick="switchTab(0)">Films</div>
+                    <div class="tab-btn" onclick="switchTab(1)">Events</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Films Grid -->
+        <div id="films-grid" class="films-grid grid-container active reveal">
+            <div class="film-card tilt-card" data-type="film">
+                <img src="./assets/Youtube thumbnails/Blessed rat.jpeg" alt="" class="film-img">BLESSED RAT</img>
+                <div class="film-content">
+                    <div class="film-meta"><span>DRAMA</span><span>2023</span></div>
+                    <h3 class="card-title">Blessed Rat</h3>
+                    <p>A short film about a university boy trapped in a time loop, reliving the same events over and
+                        over...</p>
+                    <div class="film-actions">
+                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    </div>
+                </div>
+            </div>
+            <div class="film-card tilt-card" data-type="film">
+                <img src="./assets/Youtube thumbnails/Within - part 1.jpeg" alt="" class="film-img">WITHIN PART 1</img>
+                <div class="film-content">
+                    <div class="film-meta"><span>DOCUMENTARY</span><span>2022</span></div>
+                    <h3 class="card-title">Within Part 1</h3>
+                    <p>A thriller following a young girl as she struggles to uncover the truth before it's too late...
+                    </p>
+                    <div class="film-actions">
+                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    </div>
+                </div>
+            </div>
+            <div class="film-card tilt-card" data-type="film">
+                <img src="assets/Youtube thumbnails/The unmarked date.jpeg" class="film-img">THE UNMARKED DATE</img>
+                <div class="film-content">
+                    <div class="film-meta"><span>THRILLER</span><span>2023</span></div>
+                    <h3 class="card-title">The Unmarked Date</h3>
+                    <p>A crime thriller about two girls who commit a crime and try to hide the truth...</p>
+                    <div class="film-actions">
+                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    </div>
+                </div>
+            </div>
+            <div class="film-card tilt-card" data-type="film">
+                <img src="./assets/Youtube thumbnails/Another year.jpeg" alt="" class="film-img">ANOTHER YEAR</img>
+                <div class="film-content">
+                    <div class="film-meta"><span>ROAD FILM</span><span>2021</span></div>
+                    <h3 class="card-title">Another Year</h3>
+                    <p>A romantic 4 minute short film about unspoken love and the pain of waiting for someone who may
+                        never feel the same way.</p>
+                    <div class="film-actions">
+                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    </div>
+                </div>
+            </div>
+            <div class="film-card tilt-card" data-type="film">
+                <img src="./assets/Youtube thumbnails/In his mind.jpeg" alt="" class="film-img">IN HIS MIND</img>
+                <div class="film-content">
+                    <div class="film-meta"><span>PSYCHOLOGICAL THRILLER</span><span>2022</span></div>
+                    <h3 class="card-title">In His Mind</h3>
+                    <p>A psychological thriller short film about a boy living alone in a house who feels like someone is
+                        watching him.</p>
+                    <div class="film-actions">
+                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    </div>
+                </div>
+            </div>
+            <div class="film-card tilt-card" data-type="film">
+                <div class="film-img">SHATTERED SILENCE</div>
+                <div class="film-content">
+                    <div class="film-meta"><span>SCI-FI</span><span>2024</span></div>
+                    <h3 class="card-title">Shattered Silence</h3>
+                    <p>Our first short film, following a boy trying to move on after a breakup while living through his
+                        usual daily routine.</p>
+                    <div class="film-actions">
+                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Grid (Hidden by default) -->
+        <div id="events-grid" class="films-grid grid-container">
+            <div class="film-card tilt-card" data-type="event">
+                <div class="film-img">LANKA COMIC CON</div>
+                <div class="film-content">
+                    <div class="film-meta"><span>EXPO</span><span>2024</span></div>
+                    <h3 class="card-title">Comic Con Coverage</h3>
+                    <p>Full photographic and cinematic coverage of the biggest pop-culture event of the year.</p>
+                    <div class="film-actions">
+                        <button class="btn btn-primary">View Gallery</button>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    </div>
+                </div>
+            </div>
+            <div class="film-card tilt-card" data-type="event">
+                <div class="film-img">MUSIC FESTIVAL</div>
+                <div class="film-content">
+                    <div class="film-meta"><span>LIVE EVENT</span><span>2023</span></div>
+                    <h3 class="card-title">Sunburn Stage</h3>
+                    <p>Capturing the electric energy and vibrant lights of the coastal music festival.</p>
+                    <div class="film-actions">
+                        <button class="btn btn-primary">View Gallery</button>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    </div>
+                </div>
+            </div>
+            <div class="film-card tilt-card" data-type="event">
+                <div class="film-img">PREMIERE NIGHT</div>
+                <div class="film-content">
+                    <div class="film-meta"><span>RED CARPET</span><span>2024</span></div>
+                    <h3 class="card-title">Annual Indie Screening</h3>
+                    <p>Behind-the-scenes portraits, director Q&As, and red carpet highlights from our Colombo screening.</p>
+                    <div class="film-actions">
+                        <button class="btn btn-primary">View Gallery</button>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Achievements Section -->
+    <section id="achievements" class="container">
+        <div class="text-center">
+            <span class="section-label reveal">BY THE NUMBERS</span>
+            <h2 class="section-title reveal">Achievements</h2>
+        </div>
+
+        <div class="stats-container reveal" id="stats-wheel-container">
+            <div class="stat-item">
+                <h3 class="wheel-stat" data-value="6+">6+</h3>
+                <p>FILMS PRODUCED</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="wheel-stat" data-value="2">2</h3>
+                <p>ISLANDWIDE AWARDS</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="wheel-stat" data-value="20K+">20K+</h3>
+                <p>VIEWS WORLDWIDE</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="wheel-stat" data-value="2">2</h3>
+                <p>FILM FESTIVALS</p>
+            </div>
+        </div>
+
+        <div class="latest-achievement reveal">
+            <div class="achievement-header">
+                <span class="section-label">LATEST ACHIEVEMENT</span>
+                <h4>Best Short Film (3rd Place) – “Blessed Rat” | University of Peradeniya</h4>
+                <p>We are thrilled to share that Blessed Rat has won 3rd Place in the Open Category at Let My Country Awake 2026, organized by the Literary Subcommittee of the Students’ Union, University of Peradeniya! 
+                This is a deeply meaningful milestone for our team, validating our hard work and fueling our passion as we continue our journey in filmmaking. A huge thank you to everyone who supported us along the way. Here’s to many more stories to tell!</p>
+            </div>
+            <img src="./assets/Images/Achievement2.jpeg" height="100%" alt="Blessed Rat" class="achievement-img" >
+        </img>
+        </div>
+    </section>
+
+    <!-- 5. Testimonials Section (10 Sample Testimonials Single-Row Auto-Advancing Carousel) -->
+    <section id="testimonials" class="container text-center">
+        <span class="section-label reveal">VOICES</span>
+        <h2 class="section-title reveal">What People Say</h2>
+        <p class="section-subtitle reveal">Reflections from collaborators, festival directors, and cinephiles around the
+            globe.</p>
+
+        <div class="carousel-wrapper reveal">
+            <button class="carousel-arrow carousel-arrow-left" id="test-prev" aria-label="Previous Testimonial">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
+            <div class="carousel-viewport" id="carousel-viewport">
+                <div class="carousel-track" id="testimonial-track">
+                    <!-- Card 1 (Medium expansion) -->
+                    <div class="carousel-card">
+                        <div class="carousel-card-inner">
+                            <div class="test-author">
+                                <div class="test-avatar">CF</div>
+                                <div class="test-info">
+                                    <h5>Theekshana P. Basnayake</h5>
+                                    <p>Script writer</p>
+                                </div>
+                            </div>
+                            <p class="test-quote">"Wanderlust Pictures brought an extraordinary level of craft and intentionality to our project."</p>
+                            <div class="test-more">
+                                <div class="test-more-inner">
+                                    "Every frame felt deeply considered. From pre-production storyboarding in Paris to the final color grade, their crew operated with seamless precision. The final cut was nothing short of cinematic poetry."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 (Long expansion) -->
+                    <div class="carousel-card">
+                        <div class="carousel-card-inner">
+                            <div class="test-author">
+                                <div class="test-avatar">DA</div>
+                                <div class="test-info">
+                                    <h5>Dayo Adebisi</h5>
+                                    <p>Director, Lagos Film Institute</p>
+                                </div>
+                            </div>
+                            <p class="test-quote">"Working with this team changed how I think about visual storytelling and emotional pacing."</p>
+                            <div class="test-more">
+                                <div class="test-more-inner">
+                                    "They don't just make films — they build immersive sensory experiences that linger in the memory long after the theater lights come up. Their ability to extract raw, unguarded performances from young actors while maintaining rigorous camera movement is unmatched in the independent scene today."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 (Short-Medium expansion) -->
+                    <div class="carousel-card">
+                        <div class="carousel-card-inner">
+                            <div class="test-author">
+                                <div class="test-avatar">MH</div>
+                                <div class="test-info">
+                                    <h5>Mei-Lin Huang</h5>
+                                    <p>Festival Director, Shanghai Intl. Film Festival</p>
+                                </div>
+                            </div>
+                            <p class="test-quote">"The attention to light, pacing, and emotional truth set Wanderlust apart from any house I've seen."</p>
+                            <div class="test-more">
+                                <div class="test-more-inner">
+                                    "Our jury was immediately captivated by the atmospheric tension in their submission. Truly world-class direction."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 (Very Long expansion) -->
+                    <div class="carousel-card">
+                        <div class="carousel-card-inner">
+                            <div class="test-author">
+                                <div class="test-avatar">JV</div>
+                                <div class="test-info">
+                                    <h5>Julian Vance</h5>
+                                    <p>Senior Cinematographer, Panavision UK</p>
+                                </div>
+                            </div>
+                            <p class="test-quote">"Their mastery of atmospheric lighting and visual restraint is rare in modern cinema."</p>
+                            <div class="test-more">
+                                <div class="test-more-inner">
+                                    "Every shot feels painted rather than merely captured. Watching how their Director of Photography shapes natural twilight and practical tungsten sources without over-lighting the set reminded me of classic 35mm European cinema. They respect the shadows just as much as the highlights."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 (Medium expansion) -->
+                    <div class="carousel-card">
+                        <div class="carousel-card-inner">
+                            <div class="test-author">
+                                <div class="test-avatar">ER</div>
+                                <div class="test-info">
+                                    <h5>Elena Rostova</h5>
+                                    <p>Head Sound Designer, Nordik Soundworks</p>
+                                </div>
+                            </div>
+                            <p class="test-quote">"Collaborating with Wanderlust on audio-visual cohesion was an absolute masterclass."</p>
+                            <div class="test-more">
+                                <div class="test-more-inner">
+                                    "They understand that what remains unheard is just as powerful as dialogue. Their scripts leave generous breathing room for ambient textures, room tone, and subtle acoustic tension."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 6 (Long expansion) -->
+                    <div class="carousel-card">
+                        <div class="carousel-card-inner">
+                            <div class="test-author">
+                                <div class="test-avatar">MT</div>
+                                <div class="test-info">
+                                    <h5>Marcus Thorne</h5>
+                                    <p>Chief Film Critic, Sight & Screen</p>
+                                </div>
+                            </div>
+                            <p class="test-quote">"Blessed Rat proved that Wanderlust Pictures can command the language of high-concept cinema."</p>
+                            <div class="test-more">
+                                <div class="test-more-inner">
+                                    "Executing a time-loop narrative on an independent budget requires razor-sharp editing and spatial continuity. Wanderlust pulled it off with effortless confidence, turning a puzzle-box premise into a deeply human meditation on regret and second chances."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 7 (Short expansion) -->
+                    <div class="carousel-card">
+                        <div class="carousel-card-inner">
+                            <div class="test-author">
+                                <div class="test-avatar">SA</div>
+                                <div class="test-info">
+                                    <h5>Sofia Al-Mansoor</h5>
+                                    <p>Head of Programming, Doha Film Lab</p>
+                                </div>
+                            </div>
+                            <p class="test-quote">"A powerhouse of visionary filmmaking that resonates across cultural frontiers."</p>
+                            <div class="test-more">
+                                <div class="test-more-inner">
+                                    "Their stories carry universal vulnerability and undeniable visual grandeur that our audiences discussed for weeks."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 8 (Medium-Long expansion) -->
+                    <div class="carousel-card">
+                        <div class="carousel-card-inner">
+                            <div class="test-author">
+                                <div class="test-avatar">KT</div>
+                                <div class="test-info">
+                                    <h5>Kenji Takahashi</h5>
+                                    <p>Creative Director, Tokyo Indie Screen</p>
+                                </div>
+                            </div>
+                            <p class="test-quote">"In His Mind is one of the most chillingly disciplined psychological short films of the decade."</p>
+                            <div class="test-more">
+                                <div class="test-more-inner">
+                                    "By confining the narrative to a single domestic space, the director weaponized negative space and slow camera creeps to induce genuine paranoia. Truly unforgettable craftsmanship."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 9 (Medium expansion) -->
+                    <div class="carousel-card">
+                        <div class="carousel-card-inner">
+                            <div class="test-author">
+                                <div class="test-avatar">RB</div>
+                                <div class="test-info">
+                                    <h5>Rachel Bennett</h5>
+                                    <p>Senior Colorist, Technicolor London</p>
+                                </div>
+                            </div>
+                            <p class="test-quote">"The color palettes and visual textures Wanderlust brings to post-production are deeply inspired."</p>
+                            <div class="test-more">
+                                <div class="test-more-inner">
+                                    "Their footage arrives in the grading suite with rich latitude and deliberate production design, making it a genuine pleasure to sculpt the final look alongside their directors."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 10 (Long expansion) -->
+                    <div class="carousel-card">
+                        <div class="carousel-card-inner">
+                            <div class="test-author">
+                                <div class="test-avatar">CM</div>
+                                <div class="test-info">
+                                    <h5>Carlos Mendez</h5>
+                                    <p>Independent Filmmaker & Sundance Fellow</p>
+                                </div>
+                            </div>
+                            <p class="test-quote">"Wanderlust Pictures is setting a new benchmark for independent South Asian cinema."</p>
+                            <div class="test-more">
+                                <div class="test-more-inner">
+                                    "Their storytelling fearlessness, combined with a refusal to compromise on framing or sound design, makes them one of the most exciting collectives working today. I cannot wait to see their upcoming feature slate."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-arrow carousel-arrow-right" id="test-next" aria-label="Next Testimonial">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Carousel Indicators -->
+        <div class="carousel-dots" id="carousel-dots"></div>
+    </section>
+
+    <!-- 6. Blog Section -->
+    <section id="blog" class="container text-center">
+        <span class="section-label reveal">JOURNAL</span>
+        <h2 class="section-title reveal">Behind The Lens</h2>
+
+        <div class="blog-grid reveal text-left">
+            <div class="blog-card" data-type="blog">
+                <div class="blog-img">AVAILABLE LIGHT</div>
+                <div class="blog-meta"><span class="tag">CINEMATOGRAPHY</span><span>March 14, 2024</span></div>
+                <h3 class="card-title">The Art of Available Light: Shooting Without a Gaffer</h3>
+                <p>We explore how natural and practical lighting became the cornerstone of our visual language...</p>
+                <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
+            </div>
+            <div class="blog-card" data-type="blog">
+                <div class="blog-img">WRITING SILENCE</div>
+                <div class="blog-meta"><span class="tag">STORYTELLING</span><span>February 8, 2024</span></div>
+                <h3 class="card-title">Writing Silence: How Negative Space Shapes a Screenplay</h3>
+                <p>Our lead screenwriter discusses the underrated craft of what not to say...</p>
+                <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
+            </div>
+            <div class="blog-card" data-type="blog">
+                <div class="blog-img">FESTIVAL CIRCUIT</div>
+                <div class="blog-meta"><span class="tag">PRODUCTION</span><span>January 22, 2024</span></div>
+                <h3 class="card-title">From Festival Circuit to Distribution: Lessons from The Pale Archive</h3>
+                <p>A candid look behind the curtain of our award-winning historical drama's journey...</p>
+                <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. CTA / Pre-Footer -->
+    <section id="cta">
+        <span class="section-label reveal">GET IN TOUCH</span>
+        <h2 class="section-title reveal">Ready To Tell Your Story?</h2>
+        <p class="section-subtitle reveal" style="margin-bottom: 0;">Every great film starts with a conversation. Let's
+            talk about<br>yours.</p>
+        <div class="btn-group reveal">
+            <button class="btn btn-primary"><a href="https://wa.me/94750618403" style="color: var(--color-off-white);">Lets create your story</a></button>
+            <button class="btn btn-outline"><a href="https://docs.google.com/forms/d/1H5xzPAJwmMPGTMQx-ieexIBNVk72_6iTmOidBMNL-3g/edit?pli=1" style="color: var(--color-off-white);">Interested in
+                    acting?</a></button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="reveal">
+        <div class="footer-grid">
+            <div class="footer-left">
+                <a href="#hero" class="logo">
+                    <img src="assets/Logo/WP Logo (1).png" alt="Wanderlust Pictures Logo">
+                </a>
+                <p>An independent film production studio creating immersive, award-winning stories that resonate across
+                    cultures and borders since 2024.</p>
+                <div class="footer-contact">
+                    <div><i class="fa-solid fa-envelope"></i> wlustfilms@gmail.com</div>
+                    <div><i class="fa-solid fa-phone"></i> +94 75 061 8403</div>
+                </div>
+                <div class="social-icons">
+                    <a href="https://www.youtube.com/@wlustpictures" class="social-icon" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://www.linkedin.com/company/wanderlustpictureslk/" class="social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="https://www.facebook.com/wlustpictures" class="social-icon" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/__.wanderlustp" class="social-icon" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@wlustpictures" class="social-icon" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <span class="section-label">REACH OUT</span>
+                <h4 style="text-transform: none; font-size: 2rem; margin-bottom: 1rem;">Send Us a Message</h4>
+                <form class="contact-form">
+                    <input type="text" placeholder="Full Name" aria-label="Full Name">
+                    <input type="email" placeholder="Email Address" aria-label="Email Address">
+                    <input type="text" class="full-width" placeholder="Subject" aria-label="Subject">
+                    <textarea class="full-width" placeholder="Your Message" aria-label="Your Message"></textarea>
+                    <button type="submit" class="full-width"><i class="fa-solid fa-envelope" style="margin-left: 6px;"></i> Send Message</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">
+                Developed by <a href="#"><strong>Webrion</strong>&nbsp;&nbsp;</a>© 2026 Wanderlust Pictures. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // --- 1. Smart Navbar ---
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > lastScroll && window.scrollY > 100) {
+                nav.classList.add('nav-hidden');
+            } else {
+                nav.classList.remove('nav-hidden');
+            }
+            lastScroll = window.scrollY;
+        });
+
+        // --- 2. Portfolio Tabs Logic ---
+        function switchTab(index) {
+            const pill = document.getElementById('pill');
+            const btns = document.querySelectorAll('.tab-btn');
+            const filmsGrid = document.getElementById('films-grid');
+            const eventsGrid = document.getElementById('events-grid');
+
+            // Smoothly slide pill across the equal 2-column grid without right-edge overflow
+            pill.style.transform = index === 0 ? 'translateX(0)' : 'translateX(100%)';
+
+            // Toggle Text Colors
+            btns.forEach((btn, i) => {
+                btn.classList.toggle('tab-active', i === index);
+            });
+
+            // Toggle Content Grids
+            if (index === 0) {
+                eventsGrid.classList.remove('active');
+                setTimeout(() => filmsGrid.classList.add('active'), 100);
+            } else {
+                filmsGrid.classList.remove('active');
+                setTimeout(() => eventsGrid.classList.add('active'), 100);
+            }
+        }
+
+        // --- 3. Global Modal Logic (Proportional Image, Contextual Buttons & Outside Click Close) ---
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalActions = document.getElementById('modal-actions');
+
+        function openCardModal(buttonElement) {
+            const card = buttonElement.closest('.film-card, .blog-card');
+            if (!card) return;
+
+            const cardType = card.getAttribute('data-type');
+            const title = card.querySelector('.card-title') ? card.querySelector('.card-title').innerText : 'Details';
+
+            // Extract image element content and inline styles from the card
+            const imgEl = card.querySelector('.film-img, .blog-img');
+            const imgLabel = imgEl ? imgEl.innerHTML : '';
+            const bgImage = imgEl ? window.getComputedStyle(imgEl).backgroundImage : '';
+
+            // Extract metadata spans
+            const metaEl = card.querySelector('.film-meta, .blog-meta');
+            const metaHTML = metaEl ? `<div class="modal-meta">${metaEl.innerHTML}</div>` : '';
+
+            // Extract lead summary & append long-form content
+            const leadText = card.querySelector('p') ? card.querySelector('p').innerText : '';
+            const longText = `<p>${leadText}</p>` +
+                `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor.</p>` +
+                `<p>Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet.</p>` +
+                `<p>Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus tortor.</p>`;
+
+            modalContent.innerHTML = `
+                <div class="modal-card-image" style="background-image: ${bgImage};">${imgLabel}</div>
+                ${metaHTML}
+                <h3>${title}</h3>
+                ${longText}
+            `;
+
+            // Configure footer buttons depending on section type (Close always on the right)
+            if (cardType === 'film') {
+                modalActions.innerHTML = `
+                    <button class="btn btn-primary">Watch Now</button>
+                    <button class="btn btn-outline" onclick="closeModal()">Close</button>
+                `;
+            } else if (cardType === 'event') {
+                modalActions.innerHTML = `
+                    <button class="btn btn-primary">View Gallery</button>
+                    <button class="btn btn-outline" onclick="closeModal()">Close</button>
+                `;
+            } else {
+                // Blog / Behind The Lens: Only Close button in bottom right corner
+                modalActions.innerHTML = `
+                    <button class="btn btn-outline" onclick="closeModal()">Close</button>
+                `;
+            }
+
+            modalOverlay.style.display = 'flex';
+            modalContent.scrollTop = 0;
+            setTimeout(() => modalOverlay.classList.add('show'), 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('show');
+            setTimeout(() => {
+                modalOverlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        // Close modal when clicking outside the modal-box
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('show')) {
+                closeModal();
+            }
+        });
+
+        // --- 4. iOS Alarm Clock Number Wheel Animation for Achievements ---
+        function initAchievementWheels() {
+            const statEls = document.querySelectorAll('.wheel-stat');
+            statEls.forEach(statEl => {
+                const rawVal = statEl.getAttribute('data-value') || statEl.innerText.trim();
+                statEl.innerHTML = '';
+
+                Array.from(rawVal).forEach((char, charIndex) => {
+                    if (/\d/.test(char)) {
+                        const targetDigit = parseInt(char, 10);
+                        const col = document.createElement('span');
+                        col.className = 'wheel-col';
+
+                        // Build 2 full drum rotations (20 digits) + target digit for authentic iOS alarm wheel spin
+                        const totalSpins = 2;
+                        const totalSteps = totalSpins * 10 + targetDigit;
+
+                        for (let i = 0; i <= totalSteps; i++) {
+                            const digitSpan = document.createElement('span');
+                            digitSpan.className = 'wheel-digit';
+                            digitSpan.textContent = i % 10;
+                            col.appendChild(digitSpan);
+                        }
+
+                        col.dataset.targetSteps = totalSteps;
+                        col.dataset.delay = charIndex * 140;
+                        statEl.appendChild(col);
+                    } else {
+                        const staticSpan = document.createElement('span');
+                        staticSpan.className = 'wheel-static';
+                        staticSpan.textContent = char;
+                        statEl.appendChild(staticSpan);
+                    }
+                });
+            });
+        }
+
+        function spinAchievementWheels() {
+            const cols = document.querySelectorAll('#stats-wheel-container .wheel-col');
+            cols.forEach((col, idx) => {
+                const steps = parseInt(col.dataset.targetSteps, 10);
+                const delay = idx * 120;
+                col.style.transition = `transform 1.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`;
+                col.style.transform = `translateY(-${steps * 1.15}em)`;
+            });
+        }
+
+        initAchievementWheels();
+
+        const statsContainer = document.getElementById('stats-wheel-container');
+        if (statsContainer) {
+            const wheelObserver = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        requestAnimationFrame(() => spinAchievementWheels());
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.35 });
+            wheelObserver.observe(statsContainer);
+        }
+
+        // --- 5. Intersection Observer for Reveal Animations ---
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // --- 6. Single-Row 10-Item Testimonial Carousel ---
+        const testTrack = document.getElementById('testimonial-track');
+        const prevBtn = document.getElementById('test-prev');
+        const nextBtn = document.getElementById('test-next');
+        const dotsContainer = document.getElementById('carousel-dots');
+        const testViewport = document.getElementById('carousel-viewport');
+
+        if (testTrack && prevBtn && nextBtn && dotsContainer) {
+            const testCards = Array.from(testTrack.children);
+            const totalCards = testCards.length;
+            let currentIndex = 0;
+            let autoPlayTimer = null;
+            const AUTO_DELAY = 5000;
+
+            function getCardsPerView() {
+                if (window.innerWidth <= 680) return 1;
+                if (window.innerWidth <= 1024) return 2;
+                return 3;
+            }
+
+            function getMaxIndex() {
+                const visible = getCardsPerView();
+                return Math.max(0, totalCards - visible);
+            }
+
+            function renderDots() {
+                dotsContainer.innerHTML = '';
+                const maxIdx = getMaxIndex();
+                const totalDots = maxIdx + 1;
+                for (let i = 0; i < totalDots; i++) {
+                    const dot = document.createElement('button');
+                    dot.className = `carousel-dot ${i === currentIndex ? 'active' : ''}`;
+                    dot.setAttribute('aria-label', `Navigate to testimonial slide ${i + 1}`);
+                    dot.addEventListener('click', () => {
+                        currentIndex = i;
+                        updateCarousel();
+                        resetTimer();
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+            }
+
+            function updateCarousel() {
+                const maxIdx = getMaxIndex();
+                if (currentIndex > maxIdx) currentIndex = maxIdx;
+                if (currentIndex < 0) currentIndex = 0;
+
+                if (testCards[0]) {
+                    const cardRect = testCards[0].getBoundingClientRect();
+                    const trackStyles = window.getComputedStyle(testTrack);
+                    const gap = parseFloat(trackStyles.gap) || 28;
+                    const shift = (cardRect.width + gap) * currentIndex;
+                    testTrack.style.transform = `translateX(-${shift}px)`;
+                }
+
+                const allDots = dotsContainer.querySelectorAll('.carousel-dot');
+                allDots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === currentIndex);
+                });
+            }
+
+            function advanceNext() {
+                const maxIdx = getMaxIndex();
+                currentIndex = (currentIndex >= maxIdx) ? 0 : currentIndex + 1;
+                updateCarousel();
+            }
+
+            function advancePrev() {
+                const maxIdx = getMaxIndex();
+                currentIndex = (currentIndex <= 0) ? maxIdx : currentIndex - 1;
+                updateCarousel();
+            }
+
+            function startTimer() {
+                stopTimer();
+                autoPlayTimer = setInterval(advanceNext, AUTO_DELAY);
+            }
+
+            function stopTimer() {
+                if (autoPlayTimer) {
+                    clearInterval(autoPlayTimer);
+                    autoPlayTimer = null;
+                }
+            }
+
+            function resetTimer() {
+                startTimer();
+            }
+
+            nextBtn.addEventListener('click', () => {
+                advanceNext();
+                resetTimer();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                advancePrev();
+                resetTimer();
+            });
+
+            testViewport.addEventListener('mouseenter', stopTimer);
+            testViewport.addEventListener('mouseleave', startTimer);
+
+            window.addEventListener('resize', () => {
+                renderDots();
+                updateCarousel();
+            });
+
+            renderDots();
+            updateCarousel();
+            startTimer();
+        }
+
+        // --- 7. 3D Tilt Effect ---
+        const tiltCards = document.querySelectorAll('.tilt-card');
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -3;
+                const rotateY = ((x - centerX) / centerX) * 12;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(40px) scale3d(1.035, 1.035, 1.035)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale3d(1, 1, 1)`;
+                card.style.transition = `transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)`;
+            });
+            card.addEventListener('mouseenter', () => { card.style.transition = `transform 0.15s ease-out`; });
+        });
+
+        // --- 8. Three.js Volumetric Smoke Setup ---
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+        scene.fog = new THREE.FogExp2(0x000000, 0.0012);
+
+        const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 2000);
+        camera.position.z = 850;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: false, antialias: true, powerPreference: "high-performance" });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        function createSmokeTexture() {
+            const smokeCanvas = document.createElement('canvas');
+            smokeCanvas.width = 256; smokeCanvas.height = 256;
+            const ctx = smokeCanvas.getContext('2d');
+            const grad = ctx.createRadialGradient(128, 128, 10, 128, 128, 120);
+            grad.addColorStop(0, 'rgba(235, 238, 245, 0.85)');
+            grad.addColorStop(0.3, 'rgba(175, 180, 192, 0.5)');
+            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(128, 128, 120, 0, Math.PI * 2);
+            ctx.fill();
+            return new THREE.CanvasTexture(smokeCanvas);
+        }
+
+        scene.add(new THREE.DirectionalLight(0xffffff, 0.85));
+        scene.add(new THREE.AmbientLight(0x28282c));
+
+        const smokeMaterial = new THREE.MeshLambertMaterial({ map: createSmokeTexture(), transparent: true, opacity: 0.25, depthWrite: false });
+        const smokeGeo = new THREE.PlaneGeometry(360, 360);
+        const smokeParticles = [];
+        const smokeGroup = new THREE.Group();
+        scene.add(smokeGroup);
+
+        for (let i = 0; i < 110; i++) {
+            const mesh = new THREE.Mesh(smokeGeo, smokeMaterial);
+            mesh.position.set((Math.random() - 0.5) * 1100, (Math.random() - 0.5) * 1300, Math.random() * 800 - 350);
+            mesh.rotation.z = Math.random() * Math.PI * 2;
+            mesh.userData = { rotSpeed: (Math.random() - 0.5) * 0.0025, driftX: (Math.random() - 0.5) * 0.08, driftY: (Math.random() - 0.5) * 0.06 };
+            smokeGroup.add(mesh);
+            smokeParticles.push(mesh);
+        }
+
+        let currentScrollY = window.scrollY;
+        let targetScrollY = window.scrollY;
+        window.addEventListener('scroll', () => { targetScrollY = window.scrollY; }, { passive: true });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            currentScrollY += (targetScrollY - currentScrollY) * 0.055;
+            camera.position.y += (-currentScrollY * 0.5 - camera.position.y) * 0.035;
+            camera.lookAt(0, camera.position.y, 0);
+            smokeGroup.rotation.z = currentScrollY * 0.0005;
+
+            smokeParticles.forEach(p => {
+                p.rotation.z += p.userData.rotSpeed;
+                p.position.x += p.userData.driftX;
+                p.position.y += p.userData.driftY;
+                if (p.position.x > 650) p.position.x = -650;
+                if (p.position.x < -650) p.position.x = 650;
+            });
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+
+</html>
