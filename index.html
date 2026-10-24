@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wanderlust Pictures | Cinematic Stories That Leave A Lasting Impression</title>
+    <title>Wanderlust Pictures | Roaming Through Stories</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* CSS Variables */
-        
         :root {
             --bg-dark: #000000;
             --bg-card: rgba(20, 20, 20, 0.65);
@@ -32,22 +31,22 @@
         }
 
         *::-webkit-scrollbar {
-            width: 10px; /* Width of the vertical scrollbar */
-            height: 10px; /* Height of the horizontal scrollbar */              
+            width: 10px;
+            height: 10px;
         }
 
         *::-webkit-scrollbar-track {
-            background: #000000; /* Matches the global dark background */
+            background: #000000;
         }
 
         *::-webkit-scrollbar-thumb {
             background-color: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
-            border: 3px solid #000000; /* Creates padding effect by showing the track color around the thumb */
+            border: 3px solid #000000;
         }
 
         *::-webkit-scrollbar-thumb:hover {
-        background-color: rgba(255, 255, 255, 0.45); /* Highlights slightly when hovered */
+            background-color: rgba(255, 255, 255, 0.45);
         }
 
         /* Cursor Bug Fix */
@@ -174,7 +173,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 85px; /* Locks the navbar height */
+            height: 85px;
             padding: 0 5%;
             position: fixed;
             top: 0;
@@ -198,7 +197,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            height: 40px; /* Prevents the 200px image from pushing the navbar taller */
+            height: 40px;
             overflow: visible;
         }
 
@@ -207,7 +206,7 @@
             width: auto;
             object-fit: contain;
             display: block;
-            pointer-events: none; /* Prevents transparent PNG padding from blocking clicks below the navbar */
+            pointer-events: none;
         }
 
         .nav-links {
@@ -279,6 +278,8 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             background-image: linear-gradient(135deg, #2b2b2b 0%, #111111 100%);
+            background-size: cover;
+            background-position: center;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -288,6 +289,12 @@
             font-weight: 600;
             margin-bottom: 1.75rem;
             overflow: hidden;
+            object-fit: cover;
+        }
+
+        img.modal-card-image {
+            display: block;
+            background: #151515;
         }
 
         .modal-meta {
@@ -477,7 +484,7 @@
             border: 1px solid var(--border-color);
             object-fit: cover;
             display: block;
-            background-color: #151515; /* Fallback color while the image loads */
+            background-color: #151515;
         }
 
         .crew-member {
@@ -493,12 +500,15 @@
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, filter 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, background-color 0.4s ease;
         }
 
-        .crew-flex:has(.crew-member:hover) .crew-member {
+        /* Support spotlight dimming both in standard flex and when paginated into carousel */
+        .crew-flex:has(.crew-member:hover) .crew-member,
+        .paginated-grid-page:has(.crew-member:hover) .crew-member {
             opacity: 0.35;
             filter: blur(2px);
         }
 
         .crew-flex .crew-member:hover,
+        .paginated-grid-page .crew-member:hover,
         .crew-member.spotlight-active {
             opacity: 1 !important;
             filter: blur(0px) !important;
@@ -506,15 +516,6 @@
             background: rgba(26, 26, 26, 0.85);
             border-color: rgba(255, 255, 255, 0.35);
             box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.9), 0 0 35px 2px rgba(255, 255, 255, 0.14);
-        }
-
-        .crew-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
-            border: 1px solid var(--border-color);
-            background-image: radial-gradient(circle at 35% 35%, #444, #151515);
         }
 
         .crew-member h4 {
@@ -593,6 +594,10 @@
             display: grid;
         }
 
+        .grid-container.paginated-mode.active {
+            display: block;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -644,6 +649,8 @@
             letter-spacing: 2px;
             color: rgba(255, 255, 255, 0.4);
             font-weight: 600;
+            object-fit: cover;
+            overflow: hidden;
         }
 
         .film-content {
@@ -688,8 +695,50 @@
             font-size: 0.8rem;
         }
 
+        /* Manual 6-Card Paginated Carousel Styles (For Sections > 6 Cards) */
+        .paginated-carousel-shell {
+            width: 100%;
+            position: relative;
+        }
+
+        .paginated-carousel-main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+        }
+
+        .paginated-carousel-viewport {
+            overflow: hidden;
+            width: 100%;
+            padding: 25px 10px;
+        }
+
+        .paginated-carousel-track {
+            display: flex;
+            width: 100%;
+            transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+        }
+
+        .paginated-grid-page {
+            flex: 0 0 100%;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.2rem;
+            perspective: 1200px;
+            padding: 0 4px;
+        }
+
+        .paginated-grid-page .crew-member {
+            width: 100%;
+        }
+
         @media (max-width: 960px) {
-            .films-grid {
+            .films-grid,
+            .paginated-grid-page {
                 grid-template-columns: repeat(2, 1fr);
             }
 
@@ -699,7 +748,8 @@
         }
 
         @media (max-width: 600px) {
-            .films-grid {
+            .films-grid,
+            .paginated-grid-page {
                 grid-template-columns: 1fr;
             }
 
@@ -709,18 +759,6 @@
         }
 
         /* Achievements & iOS Slot Wheel Roller */
-
-        .achievement-img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            object-position: center;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            display: block;
-            background-color: #151515; /* Fallback color while loading */
-        }
-
         .stats-container {
             display: flex;
             justify-content: space-around;
@@ -798,16 +836,12 @@
         .achievement-img {
             width: 100%;
             height: 500px;
-            background: linear-gradient(135deg, #181818 0%, #0c0c0c 100%);
+            object-fit: cover;
+            object-position: center;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(3rem, 10vw, 8rem);
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.2);
             border: 1px solid var(--border-color);
-            letter-spacing: 4px;
+            display: block;
+            background-color: #151515;
         }
 
         /* Testimonials Carousel with Spotlight & Dynamic Downward Expansion */
@@ -1046,6 +1080,8 @@
             letter-spacing: 2px;
             color: rgba(255, 255, 255, 0.4);
             font-weight: 600;
+            object-fit: cover;
+            overflow: hidden;
         }
 
         .blog-meta {
@@ -1115,6 +1151,10 @@
             margin: 0 auto 4rem;
         }
 
+        .footer-left .logo {
+            height: auto;
+        }
+
         .footer-left p {
             color: var(--text-muted);
             font-size: 0.9rem;
@@ -1159,6 +1199,17 @@
             gap: 1.5rem;
         }
 
+        .contact-form label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .contact-form label:nth-of-type(3),
+        .contact-form label:nth-of-type(4) {
+            grid-column: 1 / -1;
+        }
+
         .contact-form .full-width {
             grid-column: 1 / -1;
         }
@@ -1166,6 +1217,7 @@
         .contact-form input,
         .contact-form textarea {
             width: 100%;
+            margin-top: 0.4rem;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-color);
             padding: 1rem;
@@ -1266,7 +1318,7 @@
     <!-- Smart Navbar -->
     <nav id="navbar">
         <a href="#hero" class="logo">
-        <img src="./assets/Wanderlust logo/WP White logo1.jpg" alt="Wanderlust Pictures Logo">
+            <img src="./assets/Wanderlust logo/WP White logo1.jpg" alt="Wanderlust Pictures Logo">
         </a>
         <ul class="nav-links">
             <li><a href="#hero">Home</a></li>
@@ -1276,7 +1328,6 @@
             <li><a href="#testimonials">Testimonials</a></li>
             <li><a href="#blog">Blog</a></li>
         </ul>
-        <!-- Redirects directly to the pre-footer (#cta) section -->
         <a href="#cta" class="btn btn-primary">Let's Create</a>
     </nav>
 
@@ -1316,7 +1367,7 @@
         </div>
     </section>
 
-    <!-- 2. About Section -->
+    <!-- 2. About Section (7 Cards -> Automatically turns into a 6-card manual carousel) -->
     <section id="about" class="container text-center">
         <span class="section-label reveal">OUR PEOPLE</span>
         <h2 class="section-title reveal">About Wanderlust Pictures</h2>
@@ -1325,27 +1376,27 @@
 
         <div class="crew-flex reveal">
             <div class="crew-member">
-                <img src="./assets/Member photos/Sithum.jpeg" alt="Sithum Machadio" class="crew-img">
+                <img src="./assets/Member photos/Sithum.jpeg" alt="Sithum Machado" class="crew-img">
                 <h4>Sithum Machado</h4>
-                <span class="role">FOUNDER & DIRECTOR</span>
+                <span class="role">FOUNDER | DIRECTOR & SCREENWRITER</span>
                 <p>Leading the company's creative vision and directing productions.</p>
             </div>
             <div class="crew-member">
                 <img src="./assets/Member photos/Venuja.jpeg" alt="Venuja Weerawardhana" class="crew-img">
                 <h4>Venuja Weerawardhana</h4>
-                <span class="role">EDITOR & VIDEOGRAPHER</span>
+                <span class="role">ACTOR | EDITOR & CINEMATOGRAPHER</span>
                 <p>Transforming raw footage into compelling stories through editing.</p>
             </div>
             <div class="crew-member">
                 <img src="./assets/Member photos/Abhishek.jpeg" alt="M. Abishek" class="crew-img">
                 <h4>M. Abishek</h4>
-                <span class="role">LEAD DESIGNER & DIRECTOR</span>
+                <span class="role">LEAD DESIGNER | DIRECTOR & SCREENWRITER</span>
                 <p>Ensuring every production maintains a strong visual identity.</p>
             </div>
             <div class="crew-member">
                 <img src="./assets/Member photos/Chapa.jpeg" alt="Chapa Bandara" class="crew-img">
                 <h4>Chapa<br>Bandara</h4>
-                <span class="role">PRODUCTION MANAGER</span>
+                <span class="role">PRODUCTION MANAGER & MAKEUP ARTIST</span>
                 <p>Coordinates production operations, schedules, and logistics.</p>
             </div>
             <div class="crew-member">
@@ -1357,7 +1408,7 @@
             <div class="crew-member">
                 <img src="./assets/Member photos/Daham.jpg" alt="Daham Dissanayake" class="crew-img">
                 <h4>Daham<br>Dissanayake</h4>
-                <span class="role">DIRECTOR OF PHOTOGRAPHY</span>
+                <span class="role">CINEMATOGRAPHER</span>
                 <p>Captures cinematic visuals and oversees camera work.</p>
             </div>
             <div class="crew-member">
@@ -1384,121 +1435,268 @@
             </div>
         </div>
 
-        <!-- Films Grid -->
+        <!-- Films Grid (Will automatically paginate into a manual carousel if > 6 cards are added) -->
         <div id="films-grid" class="films-grid grid-container active reveal">
-            <div class="film-card tilt-card" data-type="film">
-                <img src="./assets/Youtube thumbnails/Blessed rat.jpeg" alt="" class="film-img">BLESSED RAT</img>
+            <!-- Film 1 -->
+            <div class="film-card tilt-card" data-type="film" data-youtube="https://youtu.be/I-2hxhEdKAs">
+                <img src="./assets/Youtube thumbnails/Blessed rat.jpeg" alt="Blessed Rat" class="film-img">
                 <div class="film-content">
-                    <div class="film-meta"><span>DRAMA</span><span>2023</span></div>
+                    <div class="film-meta"><span>THRILLER/DRAMA</span><span>2026</span></div>
                     <h3 class="card-title">Blessed Rat</h3>
-                    <p>A short film about a university boy trapped in a time loop, reliving the same events over and
-                        over...</p>
-                    <div class="film-actions">
-                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
-                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
-                    </div>
-                </div>
-            </div>
-            <div class="film-card tilt-card" data-type="film">
-                <img src="./assets/Youtube thumbnails/Within - part 1.jpeg" alt="" class="film-img">WITHIN PART 1</img>
-                <div class="film-content">
-                    <div class="film-meta"><span>DOCUMENTARY</span><span>2022</span></div>
-                    <h3 class="card-title">Within Part 1</h3>
-                    <p>A thriller following a young girl as she struggles to uncover the truth before it's too late...
+                    <p>A short film about a university boy trapped in a time loop, reliving the same events over and over...</p>
+                    <!-- Custom hidden modal paragraphs specific to Blessed Rat -->
+                    <div class="card-full-text" style="display: none;">
+                        <p>“Better to be myself than a winner in the rat race.”<br><br>
+
+                        In a world where everyone is running to get ahead, chasing success, and repeating the same routines every day, we often forget what it means to truly live.<br><br>
+
+                        Blessed Rat tells the story of a boy trapped in an endless cycle of work and repetition, living the same day over and over again. Like many of us caught in the rat race, he becomes so consumed by his daily routine that life begins to feel like a loop with no way out. Yet, there is something special about him — a blessing that makes his story different.<br><br>
+
+                        Through his journey, the film explores the pressure of modern life, the pursuit of success, and the quiet struggle to break free from a cycle that society has taught us to accept. It invites us to question whether winning the rat race is truly worth it, or whether the real victory lies in finding the courage to be ourselves.<br><br>
+
+                        Because sometimes, the greatest blessing is not winning the race, but realizing that we were never meant to run it.<br><br>
+
+                        A film by <strong>Sithum Machado</strong><br>
+                        Starring: <strong>Savinda Weragoda, Tharindu Hiran</strong><br><br>
+
+                        Presented by: <strong>Wanderlust Pictures</strong><br>
+                        Directed by: <strong>Sithum Machado</strong><br>
+                        Written by: <strong>Theekshana P. Basnayake</strong><br>
+                        Director of Photography: <strong>M. Abhishek</strong><br>
+                        Assistant Director: <strong>Sankani Dissanayake</strong><br>
+                        Edited by: <strong>Venuja Weerawardhana</strong><br>
+                        Music/Beats by: <strong>Shehan Withanawasam</strong><br><br>
+
+                        Additional Voice by: <strong>Venuja Weerawardhana</strong><br>
+                        Film Posters by: <strong>Graphique Studio</strong><br>
+                        Thumbnail by: <strong>Graphique Studio</strong><br>
+                        Dubbed by: <strong>Sithum Machado</strong> <br>
+                        Camera Equipments: <strong>Deshan Camera Store - Nelundeniya, Kegalle</strong><br><br>
+
+                        <strong>Achievements:</strong><br>
+                        - Best Short Film (2nd Place) – “Blessed Rat” | Frame by Frame Short Film Competition | Rotaract Club of the University of Ruhuna<br>
+                        - Best Short Film (3rd Place) – “Blessed Rat” (Open Category) | "Let My Country Awake 2026" | Literary Subcommittee, Students' Union, University of Peradeniya
+                    
                     </p>
+                    </div>
                     <div class="film-actions">
-                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <a href="https://youtu.be/I-2hxhEdKAs" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</a>
                         <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
                     </div>
                 </div>
             </div>
-            <div class="film-card tilt-card" data-type="film">
-                <img src="assets/Youtube thumbnails/The unmarked date.jpeg" class="film-img">THE UNMARKED DATE</img>
+
+            <!-- Film 2 -->
+            <div class="film-card tilt-card" data-type="film" data-youtube="https://youtu.be/1V-BkqLXflQ">
+                <img src="./assets/Youtube thumbnails/Within - part 1.jpeg" alt="Within Part 1" class="film-img">
                 <div class="film-content">
-                    <div class="film-meta"><span>THRILLER</span><span>2023</span></div>
+                    <div class="film-meta"><span>THRILLER</span><span>2025</span></div>
+                    <h3 class="card-title">WITHIN</h3>
+                    <p>A thriller following a young girl as she struggles to uncover the truth before it's too late...</p>
+                    <!-- Custom hidden modal paragraphs specific to Within Part 1 -->
+                    <div class="card-full-text" style="display: none;">
+                        <p>“Is she trapped? you can decide it.”<br><br>
+
+                        A young girl finds herself trapped inside a house, caught in a terrifying nightmare that seems to have no end. Desperate to escape, she struggles to understand what is happening around her. The house feels strangely familiar, yet something about it is deeply unsettling. Every room holds an eerie silence, every corner seems to conceal something unknown, and the feeling that something is terribly wrong grows stronger with every passing moment.<br><br>
+
+                        Just when she believes she has finally escaped the nightmare, she wakes up, only to discover that something still isn't right. The same surroundings, the same unsettling atmosphere, and the same inexplicable events begin to repeat themselves. Each awakening brings her closer to questioning her own reality, as she becomes trapped in an endless cycle of dreams and false awakenings. What initially seems like a frightening dream slowly transforms into something far more disturbing, leaving her unable to distinguish between what is real and what exists only in her mind.<br><br>
+
+                        As fear takes hold and confusion deepens, she desperately searches for a way out, wondering whether she is still dreaming or trapped in a reality she cannot comprehend. With every failed attempt to wake up, the boundaries between dreams and reality grow thinner, turning her familiar surroundings into a place of uncertainty and terror.<br><br>
+
+                        But what if the real nightmare isn't being trapped in a dream, but believing you've finally woken up?<br><br>
+
+                        A psychological thriller that explores the mysterious world of dreams, the terror of false awakenings, and the fragile boundary between reality and illusion, leaving one haunting question behind: How can you escape a nightmare when you can no longer tell whether you're awake?<br><br>
+
+                        A film by: <strong>Sithum Machado</strong><br>
+                        Starring: <strong>Hasini Pinsara</strong><br><br>
+
+                        Presented by: <strong>Wanderlust Pictures</strong><br>
+                        Written & Directed by: <strong>Sithum Machado</strong><br>
+                        Director of Photography & Edited by: <strong>Venuja Weerawardhana</strong><br>
+                        Assistant Director of Photography: <strong>Tharindu Dilshan</strong><br>
+                        Film Posters: <strong>Graphique Studio</strong><br>
+                        Photography: <strong>Venuja Weerawardhana</strong><br><br>
+
+                        Special Thanks: <strong>M. Abishek, Tharindu Dilshan, Deshalee Kulathunga, Pankaja Weerathunga & Sandanu Methnim.</strong></p>
+                    </div>
+                    <div class="film-actions">
+                        <a href="https://youtu.be/1V-BkqLXflQ" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</a>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Film 3 -->
+            <div class="film-card tilt-card" data-type="film" data-youtube="https://youtu.be/HAJeOyt_zwY">
+                <img src="assets/Youtube thumbnails/The unmarked date.jpeg" alt="The Unmarked Date" class="film-img">
+                <div class="film-content">
+                    <div class="film-meta"><span>CRIME/THRILLER</span><span>2025</span></div>
                     <h3 class="card-title">The Unmarked Date</h3>
                     <p>A crime thriller about two girls who commit a crime and try to hide the truth...</p>
+                    <!-- Custom hidden modal paragraphs specific to The Unmarked Date -->
+                    <div class="card-full-text" style="display: none;">
+                        <p>"In just minutes, everything can change."<br><br> 
+
+                            A gripping crime thriller following two girls haunted by a crime from their past. Believing they have left their darkest secrets behind, they attempt to move forward with their lives, hoping that time will bury the truth and erase the consequences of their actions. However, the past has a way of returning when least expected, and no secret can remain hidden forever. Their sense of security begins to fade as the memories of what happened continue to haunt them, leaving them trapped between the lives they want to live and the truth they desperately want to escape.<br><br>
+
+                            Their fragile peace is shattered when the killer unexpectedly returns to their house, turning their familiar surroundings into a place of fear and uncertainty. As tension rises and the threat draws closer, the two girls are forced to confront the consequences of their past while struggling to protect themselves from what lies ahead. With trust becoming uncertain and their darkest secrets threatening to surface, every moment brings them closer to a truth they can no longer avoid. Because no matter how deeply you bury the past, some secrets always find their way back.<br><br>
+
+                            A film by: <strong>Sithum Machado</strong><br>
+                            Starring: <strong>Devmini Ilangakoon, Hiruni Roland</strong><br>
+                            Special Appearance: <strong>Venuja Weerawardhana</strong><br><br>
+
+                            Presented & Production by: <strong>Wanderlust Pictures</strong><br>
+                            Screenplay & Directed by: <strong>Sithum Machado</strong><br>
+                            Concept & Story by: <strong>Devmini Ilangakoon, Hiruni Roland</strong><br>
+                            Director of Photography: <strong>Venuja Weerawardhana, Sithum Machado</strong><br>
+                            Editor: <strong>Venuja Weerawardhana</strong><br>
+                            Posters & Thumbnails: <strong>Graphique Studio</strong></p>
+                    </div>
                     <div class="film-actions">
-                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <a href="https://youtu.be/HAJeOyt_zwY" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</a>
                         <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
                     </div>
                 </div>
             </div>
-            <div class="film-card tilt-card" data-type="film">
-                <img src="./assets/Youtube thumbnails/Another year.jpeg" alt="" class="film-img">ANOTHER YEAR</img>
+
+            <!-- Film 4 -->
+            <div class="film-card tilt-card" data-type="film" data-youtube="https://youtu.be/0aFVvb4AtB8">
+                <img src="./assets/Youtube thumbnails/Another year.jpeg" alt="Another Year" class="film-img">
                 <div class="film-content">
-                    <div class="film-meta"><span>ROAD FILM</span><span>2021</span></div>
+                    <div class="film-meta"><span>ROMANCE/SHORT FILM</span><span>2025</span></div>
                     <h3 class="card-title">Another Year</h3>
-                    <p>A romantic 4 minute short film about unspoken love and the pain of waiting for someone who may
-                        never feel the same way.</p>
+                    <p>A romantic 4 minute short film about unspoken love and the pain of waiting for someone who may never feel the same way.</p>
+                    <!-- Custom hidden modal paragraphs specific to Another Year -->
+                    <div class="card-full-text" style="display: none;">
+                        <p>“Another Year Without Love”<br><br>
+
+                            Some people leave our lives, but the memories they leave behind stay with us. Another Year Without Love follows a young man trying to move forward after losing the girl he once loved. As time passes and another year goes by, he finds himself caught between the memories of what they shared and the reality of living without her. He hasn't found someone new, nor has he completely let go of the past. While the world around him continues to move forward, a part of him remains where their story ended. Sometimes, the hardest part of a breakup isn't losing someone; it's learning to live with the emptiness they leave behind.<br><br>
+
+                            A film by: <strong>Sithum Machado</strong><br>
+                            Starring: <strong>Hiruni Roland, Venuja Weerawardhana</strong><br><br>
+
+                            Presented & Production by: <strong>Wanderlust Pictures</strong><br>
+                            Written & Directed by: <strong>Sithum Machado</strong><br>
+                            Assistant Director & Director of Photography: <strong>M. Abishek</strong><br>
+                            Edited by: <strong>Venuja Weerawardhana</strong><br>
+                            Assistant Director of Photography: <strong>Sithum Machado</strong><br>
+                            Film Posters & Thumbnails: <strong>Graphique Studio</strong><br><br>
+
+                            Special Thanks: <strong>Rev. Fr. Ayal Fernando, Pamith Mandiv, Devmini Ilangakoon, and our beloved parents.</strong></p>
+                    </div>
                     <div class="film-actions">
-                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <a href="https://youtu.be/0aFVvb4AtB8" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</a>
                         <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
                     </div>
                 </div>
             </div>
-            <div class="film-card tilt-card" data-type="film">
-                <img src="./assets/Youtube thumbnails/In his mind.jpeg" alt="" class="film-img">IN HIS MIND</img>
+
+            <!-- Film 5 -->
+            <div class="film-card tilt-card" data-type="film" data-youtube="https://youtu.be/DsphiX0nbBc">
+                <img src="./assets/Youtube thumbnails/In his mind.jpeg" alt="In His Mind" class="film-img">
                 <div class="film-content">
-                    <div class="film-meta"><span>PSYCHOLOGICAL THRILLER</span><span>2022</span></div>
+                    <div class="film-meta"><span>PSYCHOLOGICAL THRILLER</span><span>2024</span></div>
                     <h3 class="card-title">In His Mind</h3>
-                    <p>A psychological thriller short film about a boy living alone in a house who feels like someone is
-                        watching him.</p>
+                    <p>A psychological thriller short film about a boy living alone in a house who feels like someone is watching him.</p>
+                    <!-- Custom hidden modal paragraphs specific to In His Mind -->
+                    <div class="card-full-text" style="display: none;">
+                        <p>Sometimes, the scariest feeling isn't being alone. It's knowing you might not be.<br><br>    
+
+                            A young boy living alone begins to experience strange and unexplainable events inside his own home. What once felt like a familiar and peaceful place slowly turns into something unsettling. Strange noises echo through the rooms, objects seem out of place, and an overwhelming feeling of being watched follows him wherever he goes. He tries to make sense of what is happening, but every attempt to find an explanation only leaves him with more questions. Is someone secretly watching him? Is there something hiding within the walls of his house, or is there something far more disturbing that he cannot understand? As fear begins to take over his everyday life, the boundary between reality and the unknown starts to blur. In a place where he should feel safest, he finds himself questioning everything around him. <br><br>
+
+                            A film by: <strong>Sithum Machado</strong><br>
+                            Starring: <strong>Venuja Weerawardhana</strong><br><br>
+
+                            Presented by: <strong>Wanderlust Pictures</strong><br>
+                            Concept & Directed by: <strong>Sithum Machado</strong><br>
+                            Assistant Director & Written by: <strong>M. Abishek</strong><br>
+                            Edited by: <strong>Venuja Weerawardhana</strong><br>
+                            Director of Photography: <strong>M. Abishek</strong><br></p>
+                    </div>
                     <div class="film-actions">
-                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <a href="https://youtu.be/DsphiX0nbBc" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</a>
                         <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
                     </div>
                 </div>
             </div>
-            <div class="film-card tilt-card" data-type="film">
+
+            <!-- Film 6 -->
+            <div class="film-card tilt-card" data-type="film" data-youtube="https://youtu.be/tAfbE1P3FNY">
                 <div class="film-img">SHATTERED SILENCE</div>
                 <div class="film-content">
-                    <div class="film-meta"><span>SCI-FI</span><span>2024</span></div>
+                    <div class="film-meta"><span>DRAMA</span><span>2024</span></div>
                     <h3 class="card-title">Shattered Silence</h3>
-                    <p>Our first short film, following a boy trying to move on after a breakup while living through his
-                        usual daily routine.</p>
+                    <p>Our first short film, following a boy trying to move on after a breakup while living through his usual daily routine.</p>
+                    <!-- Custom hidden modal paragraphs specific to Shattered Silence -->
+                    <div class="card-full-text" style="display: none;">
+                        <p>Sometimes, a stranger's message arrives when you're still trying to forget someone else.<br><br>
+
+                        Our very first short film is here! A young boy tries to move on with his life after a painful breakup, finding comfort in his usual routine and spending his days working from home. As time passes, his life continues in the same quiet and predictable way, with little to distract him from the emptiness left behind. However, everything begins to change when he unexpectedly receives a message from a stranger. What starts as an ordinary conversation soon becomes something that draws him in, interrupting his routine and raising questions about who is on the other side of the screen. As he continues communicating with the stranger, his ordinary days take an unexpected turn, leading him into an experience he never anticipated.<br><br>
+
+                        A film by: <strong>Sithum Machado</strong><br>
+                        Starring: <strong>Venuja Weerawardhana</strong><br><br>
+                        Presented by: <strong>Wanderlust Pictures</strong><br>
+                        Written & Directed by: <strong>Sithum Machado</strong><br>
+                        Director of Photography: <strong>Sithum Machado</strong><br>
+                        Edited by: <strong>Venuja Weerawardhana</strong><br></p>
+                    </div>
                     <div class="film-actions">
-                        <button class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</button>
+                        <a href="https://youtu.be/tAfbE1P3FNY" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</a>
                         <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
                     </div>
                 </div>
             </div>
         </div>
+        
 
-        <!-- Events Grid (Hidden by default) -->
+        <!-- Events Grid (Hidden by default - Will also paginate automatically if > 6 cards) -->
         <div id="events-grid" class="films-grid grid-container">
-            <div class="film-card tilt-card" data-type="event">
-                <div class="film-img">LANKA COMIC CON</div>
+            <!-- Event 1 -->
+            <div class="film-card tilt-card" data-type="event" data-youtube="https://www.youtube.com/@wlustpictures">
+                <img src="./assets/Youtube thumbnails/Leadspire 2.0.jpeg" alt="Leadspire 2.0" class="film-img">
                 <div class="film-content">
-                    <div class="film-meta"><span>EXPO</span><span>2024</span></div>
-                    <h3 class="card-title">Comic Con Coverage</h3>
-                    <p>Full photographic and cinematic coverage of the biggest pop-culture event of the year.</p>
+                    <div class="film-meta"><span>EVENT</span><span>2025</span></div>
+                    <h3 class="card-title">Leadspire 2.0</h3>
+                    <p>Official aftermovie of LEADSPIRE 2.0, organized by AIESEC in SLIIT Kandy UNI.</p>
+                    <!-- Custom hidden modal paragraphs specific to Event 1 -->
+                    <div class="card-full-text" style="display: none;">
+                        <p>We are proud to present the official aftermovie of LEADSPIRE 2.0, organized by AIESEC in SLIIT Kandy UNI. As the Official Digital Media Partner, Wanderlust Pictures had the opportunity to collaborate with the AIESEC team to capture the energy, connections, and unforgettable moments that made this event special.<br><br>
+
+                            This collaboration was a valuable experience for our team, allowing us to work alongside AIESEC in SLIIT Kandy UNI and contribute to bringing their vision to life through digital media. We sincerely thank the team for their trust, support, and the opportunity to be part of LEADSPIRE 2.0. We look forward to more collaborations and creating meaningful stories together.<br><br>
+
+                            Cinematography by: <strong>Daham Dissanayake, Venuja Weerawardhana</strong><br>
+                            Edited by: <strong>Venuja Weerawardhana</strong><br>
+                            Crew Assistants: <strong>Buddhi Jayasundara, Chapa Bandara, Sithum Machado</strong><br>
+                            Thumbnail by: <strong>M. Abishek (Graphique Studio)</strong></p>
+                </div>
                     <div class="film-actions">
-                        <button class="btn btn-primary">View Gallery</button>
+                        <a href="https://www.youtube.com/watch?v=832uGv5wz1A" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> View Event</a>
                         <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
                     </div>
                 </div>
             </div>
-            <div class="film-card tilt-card" data-type="event">
-                <div class="film-img">MUSIC FESTIVAL</div>
+
+            <!-- Event 2 -->
+            <div class="film-card tilt-card" data-type="event" data-youtube="https://youtu.be/THvykfZNfMk">
+                <img src="./assets/Youtube thumbnails/LEADCON 2026.jpeg" alt="In His Mind" class="film-img">
                 <div class="film-content">
-                    <div class="film-meta"><span>LIVE EVENT</span><span>2023</span></div>
-                    <h3 class="card-title">Sunburn Stage</h3>
-                    <p>Capturing the electric energy and vibrant lights of the coastal music festival.</p>
-                    <div class="film-actions">
-                        <button class="btn btn-primary">View Gallery</button>
-                        <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
+                    <div class="film-meta"><span>EVENT</span><span>2026</span></div>
+                    <h3 class="card-title">LEADCON 2026</h3>
+                    <p>Official aftermovie of LEADCON 2026, organized by AIESEC in SLIIT Kandy UNI.</p>
+                    <!-- Custom hidden modal paragraphs specific to Event 2 -->
+                    <div class="card-full-text" style="display: none;">
+                        <p>We are proud to present the official aftermovie of LEADCON 2026, organized by AIESEC in SLIIT Kandy UNI. As the Official Media Partner, Wanderlust Pictures had the privilege of capturing the energy, inspiring connections, and unforgettable moments that made this event a memorable experience.<br><br>
+
+                             We sincerely thank the organizing team for trusting us and giving us the opportunity to be part of LEADCON 2026. It was a pleasure collaborating with AIESEC in SLIIT Kandy UNI and bringing the event's story to life through our lens. Here's to meaningful partnerships, creative collaborations, and many more stories worth telling.<br><br>
+
+                            Cinematography & Edited by: <strong>Venuja Weerawardhana</strong><br><br>
+
+                            A special shoutout to <strong>Venuja Weerawardhana</strong> for his creativity, dedication, and passion in bringing this project to life. Every frame reflects his hard work and commitment, and we're proud to have him as part of the Wanderlust Pictures team.<br><br>
+
+                            Crew Assistants: <strong>M. Abishek, Chapa Bandara, Buddhi Jayasundara, Sithum Machado</strong></p>
                     </div>
-                </div>
-            </div>
-            <div class="film-card tilt-card" data-type="event">
-                <div class="film-img">PREMIERE NIGHT</div>
-                <div class="film-content">
-                    <div class="film-meta"><span>RED CARPET</span><span>2024</span></div>
-                    <h3 class="card-title">Annual Indie Screening</h3>
-                    <p>Behind-the-scenes portraits, director Q&As, and red carpet highlights from our Colombo screening.</p>
                     <div class="film-actions">
-                        <button class="btn btn-primary">View Gallery</button>
+                        <a href="https://youtu.be/THvykfZNfMk" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> View Event</a>
                         <button class="btn btn-outline" onclick="openCardModal(this)">View Details</button>
                     </div>
                 </div>
@@ -1539,8 +1737,7 @@
                 <p>We are thrilled to share that Blessed Rat has won 3rd Place in the Open Category at Let My Country Awake 2026, organized by the Literary Subcommittee of the Students’ Union, University of Peradeniya! 
                 This is a deeply meaningful milestone for our team, validating our hard work and fueling our passion as we continue our journey in filmmaking. A huge thank you to everyone who supported us along the way. Here’s to many more stories to tell!</p>
             </div>
-            <img src="./assets/Images/Achievement2.jpeg" height="100%" alt="Blessed Rat" class="achievement-img" >
-        </img>
+            <img src="./assets/Images/Achievement2.jpeg" alt="Blessed Rat" class="achievement-img">
         </div>
     </section>
 
@@ -1561,195 +1758,44 @@
 
             <div class="carousel-viewport" id="carousel-viewport">
                 <div class="carousel-track" id="testimonial-track">
-                    <!-- Card 1 (Medium expansion) -->
+                    <!-- Card 1 -->
                     <div class="carousel-card">
                         <div class="carousel-card-inner">
                             <div class="test-author">
-                                <div class="test-avatar">CF</div>
+                                <div class="test-avatar">TB</div>
                                 <div class="test-info">
                                     <h5>Theekshana P. Basnayake</h5>
-                                    <p>Script writer</p>
+                                    <p>Student<br>University of Sri Jayawardanapura</p>
                                 </div>
                             </div>
-                            <p class="test-quote">"Wanderlust Pictures brought an extraordinary level of craft and intentionality to our project."</p>
+                            <p class="test-quote">"What drew me to this team is their dedication to the craft and genuine love for filmmaking."</p>
                             <div class="test-more">
                                 <div class="test-more-inner">
-                                    "Every frame felt deeply considered. From pre-production storyboarding in Paris to the final color grade, their crew operated with seamless precision. The final cut was nothing short of cinematic poetry."
+                                    "Having followed their journey since their very first short film, witnessing their growth, consistency, and commitment has been inspiring. As a fellow filmmaker, I’m happy to be part of their journey and look forward to seeing them continue to grow and tell their own stories."
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card 2 (Long expansion) -->
+                    <!-- Card 2 -->
                     <div class="carousel-card">
                         <div class="carousel-card-inner">
                             <div class="test-author">
-                                <div class="test-avatar">DA</div>
+                                <div class="test-avatar">SD</div>
                                 <div class="test-info">
-                                    <h5>Dayo Adebisi</h5>
-                                    <p>Director, Lagos Film Institute</p>
+                                    <h5>Sankani Dissanayake</h5>
+                                    <p>Student<br>University College of Ratmalana</p>
                                 </div>
                             </div>
-                            <p class="test-quote">"Working with this team changed how I think about visual storytelling and emotional pacing."</p>
+                            <p class="test-quote">"It was a great experience working with Wanderlust Pictures as an Assistant Director on one of their short film productions."</p>
                             <div class="test-more">
                                 <div class="test-more-inner">
-                                    "They don't just make films — they build immersive sensory experiences that linger in the memory long after the theater lights come up. Their ability to extract raw, unguarded performances from young actors while maintaining rigorous camera movement is unmatched in the independent scene today."
+                                    "A team that believes in creating the best possible work with limited resources, driven by passion, creativity, and dedication. I’m truly glad to have been part of this journey, and seeing our work receive awards made the experience even more special."
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card 3 (Short-Medium expansion) -->
-                    <div class="carousel-card">
-                        <div class="carousel-card-inner">
-                            <div class="test-author">
-                                <div class="test-avatar">MH</div>
-                                <div class="test-info">
-                                    <h5>Mei-Lin Huang</h5>
-                                    <p>Festival Director, Shanghai Intl. Film Festival</p>
-                                </div>
-                            </div>
-                            <p class="test-quote">"The attention to light, pacing, and emotional truth set Wanderlust apart from any house I've seen."</p>
-                            <div class="test-more">
-                                <div class="test-more-inner">
-                                    "Our jury was immediately captivated by the atmospheric tension in their submission. Truly world-class direction."
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 4 (Very Long expansion) -->
-                    <div class="carousel-card">
-                        <div class="carousel-card-inner">
-                            <div class="test-author">
-                                <div class="test-avatar">JV</div>
-                                <div class="test-info">
-                                    <h5>Julian Vance</h5>
-                                    <p>Senior Cinematographer, Panavision UK</p>
-                                </div>
-                            </div>
-                            <p class="test-quote">"Their mastery of atmospheric lighting and visual restraint is rare in modern cinema."</p>
-                            <div class="test-more">
-                                <div class="test-more-inner">
-                                    "Every shot feels painted rather than merely captured. Watching how their Director of Photography shapes natural twilight and practical tungsten sources without over-lighting the set reminded me of classic 35mm European cinema. They respect the shadows just as much as the highlights."
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 5 (Medium expansion) -->
-                    <div class="carousel-card">
-                        <div class="carousel-card-inner">
-                            <div class="test-author">
-                                <div class="test-avatar">ER</div>
-                                <div class="test-info">
-                                    <h5>Elena Rostova</h5>
-                                    <p>Head Sound Designer, Nordik Soundworks</p>
-                                </div>
-                            </div>
-                            <p class="test-quote">"Collaborating with Wanderlust on audio-visual cohesion was an absolute masterclass."</p>
-                            <div class="test-more">
-                                <div class="test-more-inner">
-                                    "They understand that what remains unheard is just as powerful as dialogue. Their scripts leave generous breathing room for ambient textures, room tone, and subtle acoustic tension."
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 6 (Long expansion) -->
-                    <div class="carousel-card">
-                        <div class="carousel-card-inner">
-                            <div class="test-author">
-                                <div class="test-avatar">MT</div>
-                                <div class="test-info">
-                                    <h5>Marcus Thorne</h5>
-                                    <p>Chief Film Critic, Sight & Screen</p>
-                                </div>
-                            </div>
-                            <p class="test-quote">"Blessed Rat proved that Wanderlust Pictures can command the language of high-concept cinema."</p>
-                            <div class="test-more">
-                                <div class="test-more-inner">
-                                    "Executing a time-loop narrative on an independent budget requires razor-sharp editing and spatial continuity. Wanderlust pulled it off with effortless confidence, turning a puzzle-box premise into a deeply human meditation on regret and second chances."
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 7 (Short expansion) -->
-                    <div class="carousel-card">
-                        <div class="carousel-card-inner">
-                            <div class="test-author">
-                                <div class="test-avatar">SA</div>
-                                <div class="test-info">
-                                    <h5>Sofia Al-Mansoor</h5>
-                                    <p>Head of Programming, Doha Film Lab</p>
-                                </div>
-                            </div>
-                            <p class="test-quote">"A powerhouse of visionary filmmaking that resonates across cultural frontiers."</p>
-                            <div class="test-more">
-                                <div class="test-more-inner">
-                                    "Their stories carry universal vulnerability and undeniable visual grandeur that our audiences discussed for weeks."
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 8 (Medium-Long expansion) -->
-                    <div class="carousel-card">
-                        <div class="carousel-card-inner">
-                            <div class="test-author">
-                                <div class="test-avatar">KT</div>
-                                <div class="test-info">
-                                    <h5>Kenji Takahashi</h5>
-                                    <p>Creative Director, Tokyo Indie Screen</p>
-                                </div>
-                            </div>
-                            <p class="test-quote">"In His Mind is one of the most chillingly disciplined psychological short films of the decade."</p>
-                            <div class="test-more">
-                                <div class="test-more-inner">
-                                    "By confining the narrative to a single domestic space, the director weaponized negative space and slow camera creeps to induce genuine paranoia. Truly unforgettable craftsmanship."
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 9 (Medium expansion) -->
-                    <div class="carousel-card">
-                        <div class="carousel-card-inner">
-                            <div class="test-author">
-                                <div class="test-avatar">RB</div>
-                                <div class="test-info">
-                                    <h5>Rachel Bennett</h5>
-                                    <p>Senior Colorist, Technicolor London</p>
-                                </div>
-                            </div>
-                            <p class="test-quote">"The color palettes and visual textures Wanderlust brings to post-production are deeply inspired."</p>
-                            <div class="test-more">
-                                <div class="test-more-inner">
-                                    "Their footage arrives in the grading suite with rich latitude and deliberate production design, making it a genuine pleasure to sculpt the final look alongside their directors."
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 10 (Long expansion) -->
-                    <div class="carousel-card">
-                        <div class="carousel-card-inner">
-                            <div class="test-author">
-                                <div class="test-avatar">CM</div>
-                                <div class="test-info">
-                                    <h5>Carlos Mendez</h5>
-                                    <p>Independent Filmmaker & Sundance Fellow</p>
-                                </div>
-                            </div>
-                            <p class="test-quote">"Wanderlust Pictures is setting a new benchmark for independent South Asian cinema."</p>
-                            <div class="test-more">
-                                <div class="test-more-inner">
-                                    "Their storytelling fearlessness, combined with a refusal to compromise on framing or sound design, makes them one of the most exciting collectives working today. I cannot wait to see their upcoming feature slate."
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -1765,35 +1811,7 @@
         <div class="carousel-dots" id="carousel-dots"></div>
     </section>
 
-    <!-- 6. Blog Section -->
-    <section id="blog" class="container text-center">
-        <span class="section-label reveal">JOURNAL</span>
-        <h2 class="section-title reveal">Behind The Lens</h2>
-
-        <div class="blog-grid reveal text-left">
-            <div class="blog-card" data-type="blog">
-                <div class="blog-img">AVAILABLE LIGHT</div>
-                <div class="blog-meta"><span class="tag">CINEMATOGRAPHY</span><span>March 14, 2024</span></div>
-                <h3 class="card-title">The Art of Available Light: Shooting Without a Gaffer</h3>
-                <p>We explore how natural and practical lighting became the cornerstone of our visual language...</p>
-                <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
-            </div>
-            <div class="blog-card" data-type="blog">
-                <div class="blog-img">WRITING SILENCE</div>
-                <div class="blog-meta"><span class="tag">STORYTELLING</span><span>February 8, 2024</span></div>
-                <h3 class="card-title">Writing Silence: How Negative Space Shapes a Screenplay</h3>
-                <p>Our lead screenwriter discusses the underrated craft of what not to say...</p>
-                <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
-            </div>
-            <div class="blog-card" data-type="blog">
-                <div class="blog-img">FESTIVAL CIRCUIT</div>
-                <div class="blog-meta"><span class="tag">PRODUCTION</span><span>January 22, 2024</span></div>
-                <h3 class="card-title">From Festival Circuit to Distribution: Lessons from The Pale Archive</h3>
-                <p>A candid look behind the curtain of our award-winning historical drama's journey...</p>
-                <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
-            </div>
-        </div>
-    </section>
+    <!-- 6. Blog Section (Will also paginate automatically if > 6 cards) -->
 
     <!-- 7. CTA / Pre-Footer -->
     <section id="cta">
@@ -1802,9 +1820,8 @@
         <p class="section-subtitle reveal" style="margin-bottom: 0;">Every great film starts with a conversation. Let's
             talk about<br>yours.</p>
         <div class="btn-group reveal">
-            <button class="btn btn-primary"><a href="https://wa.me/94750618403" style="color: var(--color-off-white);">Lets create your story</a></button>
-            <button class="btn btn-outline"><a href="https://docs.google.com/forms/d/1H5xzPAJwmMPGTMQx-ieexIBNVk72_6iTmOidBMNL-3g/edit?pli=1" style="color: var(--color-off-white);">Interested in
-                    acting?</a></button>
+            <a href="https://wa.me/94750618403" target="_blank" rel="noopener" class="btn btn-primary">Lets create your story</a>
+            <a href="https://docs.google.com/forms/d/1H5xzPAJwmMPGTMQx-ieexIBNVk72_6iTmOidBMNL-3g/edit?pli=1" target="_blank" rel="noopener" class="btn btn-outline">Interested in acting?</a>
         </div>
     </section>
 
@@ -1818,27 +1835,39 @@
                 <p>An independent film production studio creating immersive, award-winning stories that resonate across
                     cultures and borders since 2024.</p>
                 <div class="footer-contact">
-                    <div><i class="fa-solid fa-envelope"></i> wlustfilms@gmail.com</div>
+                    <div><i class="fa-solid fa-envelope"></i> wlustflms@gmail.com</div>
                     <div><i class="fa-solid fa-phone"></i> +94 75 061 8403</div>
                 </div>
                 <div class="social-icons">
-                    <a href="https://www.youtube.com/@wlustpictures" class="social-icon" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="https://www.linkedin.com/company/wanderlustpictureslk/" class="social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href="https://www.facebook.com/wlustpictures" class="social-icon" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/__.wanderlustp" class="social-icon" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://www.tiktok.com/@wlustpictures" class="social-icon" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://www.youtube.com/@wlustpictures" target="_blank" rel="noopener" class="social-icon" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://www.linkedin.com/company/wanderlustpictureslk/" target="_blank" rel="noopener" class="social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="https://www.facebook.com/wlustpictures" target="_blank" rel="noopener" class="social-icon" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/__.wanderlustp" target="_blank" rel="noopener" class="social-icon" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@wlustpictures" target="_blank" rel="noopener" class="social-icon" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
                 </div>
             </div>
 
             <div class="footer-right">
                 <span class="section-label">REACH OUT</span>
                 <h4 style="text-transform: none; font-size: 2rem; margin-bottom: 1rem;">Send Us a Message</h4>
-                <form class="contact-form">
-                    <input type="text" placeholder="Full Name" aria-label="Full Name">
-                    <input type="email" placeholder="Email Address" aria-label="Email Address">
-                    <input type="text" class="full-width" placeholder="Subject" aria-label="Subject">
-                    <textarea class="full-width" placeholder="Your Message" aria-label="Your Message"></textarea>
-                    <button type="submit" class="full-width"><i class="fa-solid fa-envelope" style="margin-left: 6px;"></i> Send Message</button>
+                <form class="contact-form" action="https://formspree.io/f/meaaoojd" method="POST">
+                    <label>
+                        Your name:
+                        <input type="text" placeholder="Full Name" aria-label="Full Name" name="name">
+                    </label>
+                    <label>
+                        Your email:
+                        <input type="email" placeholder="Email Address" aria-label="Email Address" name="email">
+                    </label>
+                    <label>
+                        Subject:
+                        <input type="text" class="full-width" placeholder="Subject" aria-label="Subject" name="subject">
+                    </label>
+                    <label>
+                        Your message:
+                        <textarea name="message" class="full-width" placeholder="Message" aria-label="Your Message"></textarea>
+                    </label>
+                    <button type="submit" class="full-width"><i class="fa-solid fa-envelope" style="margin-right: 6px;"></i> Send Message</button>
                 </form>
             </div>
         </div>
@@ -1879,15 +1908,12 @@
             const filmsGrid = document.getElementById('films-grid');
             const eventsGrid = document.getElementById('events-grid');
 
-            // Smoothly slide pill across the equal 2-column grid without right-edge overflow
             pill.style.transform = index === 0 ? 'translateX(0)' : 'translateX(100%)';
 
-            // Toggle Text Colors
             btns.forEach((btn, i) => {
                 btn.classList.toggle('tab-active', i === index);
             });
 
-            // Toggle Content Grids
             if (index === 0) {
                 eventsGrid.classList.remove('active');
                 setTimeout(() => filmsGrid.classList.add('active'), 100);
@@ -1897,7 +1923,7 @@
             }
         }
 
-        // --- 3. Global Modal Logic (Proportional Image, Contextual Buttons & Outside Click Close) ---
+        // --- 3. Global Modal Logic (Supports <img> src, Background Images, Custom Per-Card Copy & YouTube Links) ---
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
         const modalActions = document.getElementById('modal-actions');
@@ -1907,44 +1933,56 @@
             if (!card) return;
 
             const cardType = card.getAttribute('data-type');
+            const youtubeUrl = card.getAttribute('data-youtube') || 'https://www.youtube.com/@wlustpictures';
             const title = card.querySelector('.card-title') ? card.querySelector('.card-title').innerText : 'Details';
 
-            // Extract image element content and inline styles from the card
+            // 1. Extract Image (Works seamlessly whether the card uses <img src="..."> or a <div>)
             const imgEl = card.querySelector('.film-img, .blog-img');
-            const imgLabel = imgEl ? imgEl.innerHTML : '';
-            const bgImage = imgEl ? window.getComputedStyle(imgEl).backgroundImage : '';
+            let mediaHTML = '';
+            if (imgEl) {
+                if (imgEl.tagName.toLowerCase() === 'img' && imgEl.getAttribute('src')) {
+                    const imgSrc = imgEl.getAttribute('src');
+                    mediaHTML = `<img src="${imgSrc}" alt="${title}" class="modal-card-image">`;
+                } else {
+                    const imgLabel = imgEl.innerHTML;
+                    const bgImage = window.getComputedStyle(imgEl).backgroundImage;
+                    mediaHTML = `<div class="modal-card-image" style="background-image: ${bgImage};">${imgLabel}</div>`;
+                }
+            }
 
-            // Extract metadata spans
+            // 2. Extract Metadata Spans
             const metaEl = card.querySelector('.film-meta, .blog-meta');
             const metaHTML = metaEl ? `<div class="modal-meta">${metaEl.innerHTML}</div>` : '';
 
-            // Extract lead summary & append long-form content
-            const leadText = card.querySelector('p') ? card.querySelector('p').innerText : '';
-            const longText = `<p>${leadText}</p>` +
-                `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor.</p>` +
-                `<p>Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus massa, ut blandit odio. Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet.</p>` +
-                `<p>Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus tortor.</p>`;
+            // 3. Extract Custom Hidden Paragraphs (or fallback to the card's summary paragraph)
+            const customFullTextEl = card.querySelector('.card-full-text');
+            let bodyTextHTML = '';
+            if (customFullTextEl && customFullTextEl.innerHTML.trim() !== '') {
+                bodyTextHTML = customFullTextEl.innerHTML;
+            } else {
+                const leadText = card.querySelector('p') ? card.querySelector('p').innerText : '';
+                bodyTextHTML = `<p>${leadText}</p>`;
+            }
 
             modalContent.innerHTML = `
-                <div class="modal-card-image" style="background-image: ${bgImage};">${imgLabel}</div>
+                ${mediaHTML}
                 ${metaHTML}
                 <h3>${title}</h3>
-                ${longText}
+                ${bodyTextHTML}
             `;
 
-            // Configure footer buttons depending on section type (Close always on the right)
+            // 4. Configure Footer Buttons with YouTube link (Close always on the right)
             if (cardType === 'film') {
                 modalActions.innerHTML = `
-                    <button class="btn btn-primary">Watch Now</button>
+                    <a href="${youtubeUrl}" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</a>
                     <button class="btn btn-outline" onclick="closeModal()">Close</button>
                 `;
             } else if (cardType === 'event') {
                 modalActions.innerHTML = `
-                    <button class="btn btn-primary">View Gallery</button>
+                    <a href="${youtubeUrl}" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> View Event</a>
                     <button class="btn btn-outline" onclick="closeModal()">Close</button>
                 `;
             } else {
-                // Blog / Behind The Lens: Only Close button in bottom right corner
                 modalActions.innerHTML = `
                     <button class="btn btn-outline" onclick="closeModal()">Close</button>
                 `;
@@ -1978,7 +2016,108 @@
             }
         });
 
-        // --- 4. iOS Alarm Clock Number Wheel Animation for Achievements ---
+        // --- 4. Automatic 6-Card Manual Carousel Paginator (For Crew, Films, Events & Blog) ---
+        function initPaginatedGrids() {
+            const sectionsToCheck = [
+                { selector: '#films-grid', itemSelector: '.film-card' },
+                { selector: '#events-grid', itemSelector: '.film-card' },
+                { selector: '.blog-grid', itemSelector: '.blog-card' }
+            ];
+
+            sectionsToCheck.forEach(({ selector, itemSelector }) => {
+                const container = document.querySelector(selector);
+                if (!container) return;
+
+                const items = Array.from(container.querySelectorAll(`:scope > ${itemSelector}`));
+                // Only convert into a manual carousel if there are strictly more than 6 cards
+                if (items.length <= 6) return;
+
+                const itemsPerPage = 6;
+                const totalPages = Math.ceil(items.length / itemsPerPage);
+                let currentPage = 0;
+
+                container.classList.add('paginated-mode');
+                if (!container.classList.contains('grid-container')) {
+                    container.style.display = 'block';
+                }
+
+                // Build Carousel Structure
+                const shell = document.createElement('div');
+                shell.className = 'paginated-carousel-shell';
+
+                const mainRow = document.createElement('div');
+                mainRow.className = 'paginated-carousel-main';
+
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'carousel-arrow carousel-arrow-left';
+                prevBtn.setAttribute('aria-label', 'Previous Page');
+                prevBtn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
+
+                const viewport = document.createElement('div');
+                viewport.className = 'paginated-carousel-viewport';
+
+                const track = document.createElement('div');
+                track.className = 'paginated-carousel-track';
+
+                // Group cards into pages of 6
+                for (let p = 0; p < totalPages; p++) {
+                    const page = document.createElement('div');
+                    page.className = 'paginated-grid-page';
+                    const pageItems = items.slice(p * itemsPerPage, (p + 1) * itemsPerPage);
+                    pageItems.forEach(item => page.appendChild(item));
+                    track.appendChild(page);
+                }
+
+                viewport.appendChild(track);
+
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'carousel-arrow carousel-arrow-right';
+                nextBtn.setAttribute('aria-label', 'Next Page');
+                nextBtn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
+
+                mainRow.appendChild(prevBtn);
+                mainRow.appendChild(viewport);
+                mainRow.appendChild(nextBtn);
+
+                const dotsWrap = document.createElement('div');
+                dotsWrap.className = 'carousel-dots';
+
+                for (let p = 0; p < totalPages; p++) {
+                    const dot = document.createElement('button');
+                    dot.className = `carousel-dot ${p === 0 ? 'active' : ''}`;
+                    dot.setAttribute('aria-label', `Page ${p + 1}`);
+                    dot.addEventListener('click', () => {
+                        currentPage = p;
+                        updatePage();
+                    });
+                    dotsWrap.appendChild(dot);
+                }
+
+                shell.appendChild(mainRow);
+                shell.appendChild(dotsWrap);
+                container.appendChild(shell);
+
+                function updatePage() {
+                    track.style.transform = `translateX(-${currentPage * 100}%)`;
+                    const dots = dotsWrap.querySelectorAll('.carousel-dot');
+                    dots.forEach((d, idx) => d.classList.toggle('active', idx === currentPage));
+                }
+
+                prevBtn.addEventListener('click', () => {
+                    currentPage = (currentPage <= 0) ? totalPages - 1 : currentPage - 1;
+                    updatePage();
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    currentPage = (currentPage >= totalPages - 1) ? 0 : currentPage + 1;
+                    updatePage();
+                });
+            });
+        }
+
+        initPaginatedGrids();
+
+        // --- 5. iOS Alarm Clock Number Wheel Animation for Achievements ---
         function initAchievementWheels() {
             const statEls = document.querySelectorAll('.wheel-stat');
             statEls.forEach(statEl => {
@@ -1991,7 +2130,6 @@
                         const col = document.createElement('span');
                         col.className = 'wheel-col';
 
-                        // Build 2 full drum rotations (20 digits) + target digit for authentic iOS alarm wheel spin
                         const totalSpins = 2;
                         const totalSteps = totalSpins * 10 + targetDigit;
 
@@ -2040,7 +2178,7 @@
             wheelObserver.observe(statsContainer);
         }
 
-        // --- 5. Intersection Observer for Reveal Animations ---
+        // --- 6. Intersection Observer for Reveal Animations ---
         const revealElements = document.querySelectorAll('.reveal');
         const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
@@ -2052,7 +2190,7 @@
         }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
         revealElements.forEach(el => revealObserver.observe(el));
 
-        // --- 6. Single-Row 10-Item Testimonial Carousel ---
+        // --- 7. Single-Row 10-Item Testimonial Carousel ---
         const testTrack = document.getElementById('testimonial-track');
         const prevBtn = document.getElementById('test-prev');
         const nextBtn = document.getElementById('test-next');
@@ -2164,7 +2302,7 @@
             startTimer();
         }
 
-        // --- 7. 3D Tilt Effect ---
+        // --- 8. 3D Tilt Effect ---
         const tiltCards = document.querySelectorAll('.tilt-card');
         tiltCards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
@@ -2184,7 +2322,7 @@
             card.addEventListener('mouseenter', () => { card.style.transition = `transform 0.15s ease-out`; });
         });
 
-        // --- 8. Three.js Volumetric Smoke Setup ---
+        // --- 9. Three.js Volumetric Smoke Setup ---
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000000);
