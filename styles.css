@@ -9,6 +9,52 @@
     --font-main: 'Inter', sans-serif;
     --accent: #ffffff;
     --spacing-lg: 100px;
+
+    /* Brand Fonts */
+    /* --- OPTION 2: Modern Hollywood / Title-Card System (ACTIVE) --- */
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-heading: 'Montserrat', sans-serif;
+    --font-meta: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-main: var(--font-body);
+
+    /* --- OPTION 1: A24 / Prestige Art-House System (Uncomment to switch back) ---
+    --font-display: 'Cinzel', serif;
+    --font-heading: 'Plus Jakarta Sans', sans-serif;
+    --font-meta: 'Cinzel', serif;
+    --font-body: 'Inter', sans-serif;
+    */
+}
+
+/* Headings */
+h1 {
+    font-family: var(--font-display);
+    letter-spacing: 0.04em;
+}
+
+h2, .section-title {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Card titles and Subheadings */
+h3, h4, .card-title {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+    font-weight: 600;
+}
+
+/* Film Credits / Badges / Labels */
+.section-label,
+.role,
+.film-meta,
+.scroll-text {
+    font-family: var(--font-meta);
+    letter-spacing: 2.5px;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 
 /* Scrollbar styling */
@@ -382,12 +428,14 @@ img.modal-card-image {
 }
 
 #hero h1 {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    font-weight: 600;
-    line-height: 1.15;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 5.2rem);
+    font-weight: 400;
+    line-height: 1.08;
     margin-bottom: 1.5rem;
     max-width: 900px;
-    letter-spacing: -0.03em;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
 }
 
