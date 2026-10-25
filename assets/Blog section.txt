@@ -1,47 +1,66 @@
-    <!-- 6. Blog Section (Will also paginate automatically if > 6 cards) -->
-    <section id="blog" class="container text-center">
+<section id="blog" class="container text-center">
         <span class="section-label reveal">JOURNAL</span>
         <h2 class="section-title reveal">Behind The Lens</h2>
 
-        <div class="blog-grid reveal text-left">
-            <div class="blog-card" data-type="blog">
-                <!-- You can swap this div with <img src="..." class="blog-img"> anytime and it will also work in the modal -->
-                <div class="blog-img">AVAILABLE LIGHT</div>
-                <div class="blog-meta"><span class="tag">CINEMATOGRAPHY</span><span>March 14, 2024</span></div>
-                <h3 class="card-title">The Art of Available Light: Shooting Without a Gaffer</h3>
-                <p>We explore how natural and practical lighting became the cornerstone of our visual language...</p>
-                <!-- Custom hidden modal paragraphs specific to Blog 1 -->
-                <div class="card-full-text" style="display: none;">
-                    <p>We explore how natural and practical lighting became the cornerstone of our visual language — and why working within physical constraints often breeds the most striking, honest imagery.</p>
-                    <p>When shooting independent short films on tight schedules, waiting hours to rig heavy lighting setups can drain the spontaneity out of a performance. By embracing window light, streetlamps, and practical household fixtures, our camera team learned to shape shadows using negative fill rather than artificial floodlights.</p>
+        <div class="carousel-wrapper reveal">
+            <button class="carousel-arrow carousel-arrow-left" id="blog-prev" aria-label="Previous Article">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
+            <div class="carousel-viewport" id="blog-viewport">
+                <div class="blog-track" id="blog-track">
+                    <!-- Article 1 -->
+                    <div class="blog-card" data-type="blog">
+                        <div class="blog-img">AVAILABLE LIGHT</div>
+                        <div class="blog-meta"><span class="tag">CINEMATOGRAPHY</span><span>March 14, 2024</span></div>
+                        <h3 class="card-title">The Art of Available Light: Shooting Without a Gaffer</h3>
+                        <p>We explore how natural and practical lighting became the cornerstone of our visual language...</p>
+                        <div class="card-full-text" style="display: none;">
+                            <p>We explore how natural and practical lighting became the cornerstone of our visual language — and why working within physical constraints often breeds the most striking, honest imagery.</p>
+                            <p>When shooting independent short films on tight schedules, waiting hours to rig heavy lighting setups can drain the spontaneity out of a performance. By embracing window light, streetlamps, and practical household fixtures, our camera team learned to shape shadows using negative fill rather than artificial floodlights.</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
+                    </div>
+
+                    <!-- Article 2 -->
+                    <div class="blog-card" data-type="blog">
+                        <div class="blog-img">WRITING SILENCE</div>
+                        <div class="blog-meta"><span class="tag">STORYTELLING</span><span>February 8, 2024</span></div>
+                        <h3 class="card-title">Writing Silence: How Negative Space Shapes a Screenplay</h3>
+                        <p>Our lead screenwriter discusses the underrated craft of what not to say...</p>
+                        <div class="card-full-text" style="display: none;">
+                            <p>Our writing team discusses the underrated craft of what not to say — and how deliberate silence in a screenplay can speak louder than pages of exposition.</p>
+                            <p>In cinema, audiences lean in when characters withhold their words. By stripping away redundant dialogue and trusting visual subtext, a glance or an unanswered question lingers in the viewer's mind long after the scene cuts to black.</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
+                    </div>
+
+                    <!-- Article 3 -->
+                    <div class="blog-card" data-type="blog">
+                        <div class="blog-img">FESTIVAL CIRCUIT</div>
+                        <div class="blog-meta"><span class="tag">PRODUCTION</span><span>January 22, 2024</span></div>
+                        <h3 class="card-title">From Festival Circuit to Distribution: Lessons Learned</h3>
+                        <p>A candid look behind the curtain of our award-winning short film journey...</p>
+                        <div class="card-full-text" style="display: none;">
+                            <p>A candid look behind the curtain of our award-winning short films' journey from late-night editing sessions to university competitions and festival screenings.</p>
+                            <p>Preparing a project for competition requires more than just a great cut—it demands meticulous sound mastering, deliverable formatting, and building a compelling press kit that communicates the heart of the story at a glance.</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
+                    </div>
                 </div>
-                <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
             </div>
 
-            <div class="blog-card" data-type="blog">
-                <div class="blog-img">WRITING SILENCE</div>
-                <div class="blog-meta"><span class="tag">STORYTELLING</span><span>February 8, 2024</span></div>
-                <h3 class="card-title">Writing Silence: How Negative Space Shapes a Screenplay</h3>
-                <p>Our lead screenwriter discusses the underrated craft of what not to say...</p>
-                <!-- Custom hidden modal paragraphs specific to Blog 2 -->
-                <div class="card-full-text" style="display: none;">
-                    <p>Our writing team discusses the underrated craft of what not to say — and how deliberate silence in a screenplay can speak louder than pages of exposition.</p>
-                    <p>In cinema, audiences lean in when characters withhold their words. By stripping away redundant dialogue and trusting visual subtext, a glance or an unanswered question lingers in the viewer's mind long after the scene cuts to black.</p>
-                </div>
-                <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
-            </div>
-
-            <div class="blog-card" data-type="blog">
-                <div class="blog-img">FESTIVAL CIRCUIT</div>
-                <div class="blog-meta"><span class="tag">PRODUCTION</span><span>January 22, 2024</span></div>
-                <h3 class="card-title">From Festival Circuit to Distribution: Lessons Learned</h3>
-                <p>A candid look behind the curtain of our award-winning short film journey...</p>
-                <!-- Custom hidden modal paragraphs specific to Blog 3 -->
-                <div class="card-full-text" style="display: none;">
-                    <p>A candid look behind the curtain of our award-winning short films' journey from late-night editing sessions to university competitions and festival screenings.</p>
-                    <p>Preparing a project for competition requires more than just a great cut—it demands meticulous sound mastering, deliverable formatting, and building a compelling press kit that communicates the heart of the story at a glance.</p>
-                </div>
-                <button class="btn btn-outline" onclick="openCardModal(this)">Read More →</button>
-            </div>
+            <button class="carousel-arrow carousel-arrow-right" id="blog-next" aria-label="Next Article">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
         </div>
+
+        <!-- Blog Carousel Indicators (Automatically hidden until > 3 cards exist) -->
+        <div class="carousel-dots" id="blog-dots"></div>
     </section>

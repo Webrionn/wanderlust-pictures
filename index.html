@@ -467,7 +467,7 @@
             }
         }
 
-        /* About Section */
+        /* About Section (Kept as centered flex layout) */
         .crew-flex {
             display: flex;
             flex-wrap: wrap;
@@ -500,15 +500,12 @@
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, filter 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, background-color 0.4s ease;
         }
 
-        /* Support spotlight dimming both in standard flex and when paginated into carousel */
-        .crew-flex:has(.crew-member:hover) .crew-member,
-        .paginated-grid-page:has(.crew-member:hover) .crew-member {
+        .crew-flex:has(.crew-member:hover) .crew-member {
             opacity: 0.35;
             filter: blur(2px);
         }
 
         .crew-flex .crew-member:hover,
-        .paginated-grid-page .crew-member:hover,
         .crew-member.spotlight-active {
             opacity: 1 !important;
             filter: blur(0px) !important;
@@ -539,7 +536,7 @@
             line-height: 1.6;
         }
 
-        /* Portfolio Tabs (Fixed Pill Overflow) */
+        /* Portfolio Tabs */
         .tab-wrapper {
             display: flex;
             justify-content: center;
@@ -598,6 +595,19 @@
             display: block;
         }
 
+        /* Centers portfolio cards if there are fewer than 3 in a grid */
+        .films-grid.centered-cards.active {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2.2rem;
+        }
+
+        .films-grid.centered-cards .film-card {
+            flex: 0 0 calc(33.333% - 1.5rem);
+            max-width: 380px;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -614,6 +624,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 2.2rem;
             perspective: 1200px;
+            align-items: start;
         }
 
         .film-card {
@@ -627,6 +638,7 @@
             transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
             backdrop-filter: blur(10px);
             cursor: pointer;
+            height: 100%;
         }
 
         .film-card:hover {
@@ -695,28 +707,28 @@
             font-size: 0.8rem;
         }
 
-        /* Manual 6-Card Paginated Carousel Styles (For Sections > 6 Cards) */
+        /* Manual 6-Card Paginated Carousel Styles (Full-Width, Zero Bleed, No Hover Clipping) */
         .paginated-carousel-shell {
             width: 100%;
             position: relative;
         }
 
         .paginated-carousel-main {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
             position: relative;
+            width: 100%;
         }
 
+        /* Negative margin + matching padding gives 3D tilt cards room to pop out without clipping or shrinking card width */
         .paginated-carousel-viewport {
             overflow: hidden;
-            width: 100%;
-            padding: 25px 10px;
+            margin: -45px -35px;
+            padding: 45px 35px;
         }
 
         .paginated-carousel-track {
             display: flex;
+            align-items: flex-start;
+            gap: 80px; /* Separates pages so adjacent cards never peek into the active page */
             width: 100%;
             transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
             will-change: transform;
@@ -727,34 +739,71 @@
             width: 100%;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: auto;
+            align-content: start;
+            align-items: stretch;
             gap: 2.2rem;
             perspective: 1200px;
-            padding: 0 4px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.45s ease;
         }
 
-        .paginated-grid-page .crew-member {
-            width: 100%;
+        .paginated-grid-page.is-active-page {
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        @media (max-width: 960px) {
-            .films-grid,
-            .paginated-grid-page {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .crew-member {
-                width: calc(50% - 1.5rem);
-            }
+        /* Position arrows outside the card grid so cards stay 100% full width */
+        .paginated-carousel-main > .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: 0;
+            z-index: 30;
         }
 
-        @media (max-width: 600px) {
-            .films-grid,
-            .paginated-grid-page {
-                grid-template-columns: 1fr;
+        .paginated-carousel-main > .carousel-arrow:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .paginated-carousel-main > .carousel-arrow-left {
+            left: -68px;
+        }
+
+        .paginated-carousel-main > .carousel-arrow-right {
+            right: -68px;
+        }
+
+        /* On screens where side margins are narrower, move arrows neatly beside the bottom dots */
+        @media (max-width: 1340px) {
+            .paginated-carousel-viewport {
+                margin: -35px -15px;
+                padding: 35px 15px;
             }
 
-            .crew-member {
-                width: 100%;
+            .paginated-carousel-main {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                gap: 1.2rem;
+            }
+
+            .paginated-carousel-viewport {
+                flex: 0 0 100%;
+                order: 1;
+            }
+
+            .paginated-carousel-main > .carousel-arrow {
+                position: static;
+                transform: none;
+                order: 2;
+                margin-top: 1rem;
+            }
+
+            .paginated-carousel-main > .carousel-arrow:hover {
+                transform: scale(1.1);
             }
         }
 
@@ -844,7 +893,7 @@
             background-color: #151515;
         }
 
-        /* Testimonials Carousel with Spotlight & Dynamic Downward Expansion */
+        /* Testimonials & Blog Shared Carousel Styles */
         #testimonials {
             position: relative;
             z-index: 15;
@@ -873,6 +922,11 @@
             transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
             will-change: transform;
             align-items: flex-start;
+        }
+
+        /* Centers cards when there are <= 3 cards */
+        .carousel-track.centered-mode {
+            justify-content: center;
         }
 
         .carousel-card {
@@ -1035,35 +1089,25 @@
             border-radius: 12px;
         }
 
-        @media (max-width: 1024px) {
-            .carousel-card {
-                flex: 0 0 calc(50% - 0.9rem);
-            }
-        }
-
-        @media (max-width: 680px) {
-            .carousel-card {
-                flex: 0 0 100%;
-            }
-
-            .carousel-arrow {
-                width: 40px;
-                height: 40px;
-            }
-        }
-
-        /* Blog Section */
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        /* 6. Blog / Behind The Lens Section (3-Card Row, Centered if < 3, Manual Carousel if > 3) */
+        .blog-track {
+            display: flex;
             gap: 2rem;
-            margin-top: 3rem;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+            align-items: stretch;
+        }
+
+        .blog-track.centered-mode {
+            justify-content: center;
         }
 
         .blog-card {
+            flex: 0 0 calc(33.333% - 1.34rem);
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            text-align: left;
         }
 
         .blog-img {
@@ -1113,9 +1157,25 @@
             flex-grow: 1;
         }
 
-        @media (max-width: 900px) {
-            .blog-grid {
-                grid-template-columns: 1fr;
+        @media (max-width: 1024px) {
+            .carousel-card {
+                flex: 0 0 calc(50% - 0.9rem);
+            }
+
+            .blog-card {
+                flex: 0 0 calc(50% - 1rem);
+            }
+        }
+
+        @media (max-width: 680px) {
+            .carousel-card,
+            .blog-card {
+                flex: 0 0 100%;
+            }
+
+            .carousel-arrow {
+                width: 40px;
+                height: 40px;
             }
         }
 
@@ -1367,7 +1427,7 @@
         </div>
     </section>
 
-    <!-- 2. About Section (7 Cards -> Automatically turns into a 6-card manual carousel) -->
+    <!-- 2. About Section (Kept as centered flex layout without carousel) -->
     <section id="about" class="container text-center">
         <span class="section-label reveal">OUR PEOPLE</span>
         <h2 class="section-title reveal">About Wanderlust Pictures</h2>
@@ -1435,7 +1495,7 @@
             </div>
         </div>
 
-        <!-- Films Grid (Will automatically paginate into a manual carousel if > 6 cards are added) -->
+        <!-- Films Grid (Paginates into 6-card pages if > 6 cards, without stretching single cards on page 2) -->
         <div id="films-grid" class="films-grid grid-container active reveal">
             <!-- Film 1 -->
             <div class="film-card tilt-card" data-type="film" data-youtube="https://youtu.be/I-2hxhEdKAs">
@@ -1647,9 +1707,8 @@
                 </div>
             </div>
         </div>
-        
 
-        <!-- Events Grid (Hidden by default - Will also paginate automatically if > 6 cards) -->
+        <!-- Events Grid (Hidden by default) -->
         <div id="events-grid" class="films-grid grid-container">
             <!-- Event 1 -->
             <div class="film-card tilt-card" data-type="event" data-youtube="https://www.youtube.com/@wlustpictures">
@@ -1741,7 +1800,7 @@
         </div>
     </section>
 
-    <!-- 5. Testimonials Section (10 Sample Testimonials Single-Row Auto-Advancing Carousel) -->
+    <!-- 5. Testimonials Section (Centered & Hidden Controls if <= 3 Cards, Auto Carousel if > 3 Cards) -->
     <section id="testimonials" class="container text-center">
         <span class="section-label reveal">VOICES</span>
         <h2 class="section-title reveal">What People Say</h2>
@@ -1795,7 +1854,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -1811,7 +1869,8 @@
         <div class="carousel-dots" id="carousel-dots"></div>
     </section>
 
-    <!-- 6. Blog Section (Will also paginate automatically if > 6 cards) -->
+    <!-- 6. Blog / Behind The Lens Section (3 Cards at a Time, Centered if <= 3, Manual Carousel if > 3) -->
+    
 
     <!-- 7. CTA / Pre-Footer -->
     <section id="cta">
@@ -1852,19 +1911,15 @@
                 <h4 style="text-transform: none; font-size: 2rem; margin-bottom: 1rem;">Send Us a Message</h4>
                 <form class="contact-form" action="https://formspree.io/f/meaaoojd" method="POST">
                     <label>
-                        Your name:
                         <input type="text" placeholder="Full Name" aria-label="Full Name" name="name">
                     </label>
                     <label>
-                        Your email:
                         <input type="email" placeholder="Email Address" aria-label="Email Address" name="email">
                     </label>
                     <label>
-                        Subject:
                         <input type="text" class="full-width" placeholder="Subject" aria-label="Subject" name="subject">
                     </label>
                     <label>
-                        Your message:
                         <textarea name="message" class="full-width" placeholder="Message" aria-label="Your Message"></textarea>
                     </label>
                     <button type="submit" class="full-width"><i class="fa-solid fa-envelope" style="margin-right: 6px;"></i> Send Message</button>
@@ -1923,7 +1978,7 @@
             }
         }
 
-        // --- 3. Global Modal Logic (Supports <img> src, Background Images, Custom Per-Card Copy & YouTube Links) ---
+        // --- 3. Global Modal Logic ---
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
         const modalActions = document.getElementById('modal-actions');
@@ -1936,7 +1991,7 @@
             const youtubeUrl = card.getAttribute('data-youtube') || 'https://www.youtube.com/@wlustpictures';
             const title = card.querySelector('.card-title') ? card.querySelector('.card-title').innerText : 'Details';
 
-            // 1. Extract Image (Works seamlessly whether the card uses <img src="..."> or a <div>)
+            // 1. Extract Image
             const imgEl = card.querySelector('.film-img, .blog-img');
             let mediaHTML = '';
             if (imgEl) {
@@ -1954,7 +2009,7 @@
             const metaEl = card.querySelector('.film-meta, .blog-meta');
             const metaHTML = metaEl ? `<div class="modal-meta">${metaEl.innerHTML}</div>` : '';
 
-            // 3. Extract Custom Hidden Paragraphs (or fallback to the card's summary paragraph)
+            // 3. Extract Custom Hidden Paragraphs
             const customFullTextEl = card.querySelector('.card-full-text');
             let bodyTextHTML = '';
             if (customFullTextEl && customFullTextEl.innerHTML.trim() !== '') {
@@ -1971,7 +2026,7 @@
                 ${bodyTextHTML}
             `;
 
-            // 4. Configure Footer Buttons with YouTube link (Close always on the right)
+            // 4. Configure Footer Buttons
             if (cardType === 'film') {
                 modalActions.innerHTML = `
                     <a href="${youtubeUrl}" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-play" style="margin-right: 6px;"></i> Watch Now</a>
@@ -2002,26 +2057,23 @@
             }, 300);
         }
 
-        // Close modal when clicking outside the modal-box
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) {
                 closeModal();
             }
         });
 
-        // Close modal on Escape key
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modalOverlay.classList.contains('show')) {
                 closeModal();
             }
         });
 
-        // --- 4. Automatic 6-Card Manual Carousel Paginator (For Crew, Films, Events & Blog) ---
+        // --- 4. Automatic 6-Card Manual Carousel Paginator (For Portfolio Films & Events Only) ---
         function initPaginatedGrids() {
             const sectionsToCheck = [
                 { selector: '#films-grid', itemSelector: '.film-card' },
-                { selector: '#events-grid', itemSelector: '.film-card' },
-                { selector: '.blog-grid', itemSelector: '.blog-card' }
+                { selector: '#events-grid', itemSelector: '.film-card' }
             ];
 
             sectionsToCheck.forEach(({ selector, itemSelector }) => {
@@ -2029,7 +2081,14 @@
                 if (!container) return;
 
                 const items = Array.from(container.querySelectorAll(`:scope > ${itemSelector}`));
-                // Only convert into a manual carousel if there are strictly more than 6 cards
+
+                // Center cards if there are fewer than 3
+                if (items.length < 3) {
+                    container.classList.add('centered-cards');
+                    return;
+                }
+
+                // Only convert into a manual 6-card carousel if there are strictly more than 6 cards
                 if (items.length <= 6) return;
 
                 const itemsPerPage = 6;
@@ -2037,11 +2096,7 @@
                 let currentPage = 0;
 
                 container.classList.add('paginated-mode');
-                if (!container.classList.contains('grid-container')) {
-                    container.style.display = 'block';
-                }
 
-                // Build Carousel Structure
                 const shell = document.createElement('div');
                 shell.className = 'paginated-carousel-shell';
 
@@ -2059,13 +2114,14 @@
                 const track = document.createElement('div');
                 track.className = 'paginated-carousel-track';
 
-                // Group cards into pages of 6
+                const pageElements = [];
                 for (let p = 0; p < totalPages; p++) {
                     const page = document.createElement('div');
-                    page.className = 'paginated-grid-page';
+                    page.className = `paginated-grid-page ${p === 0 ? 'is-active-page' : ''}`;
                     const pageItems = items.slice(p * itemsPerPage, (p + 1) * itemsPerPage);
                     pageItems.forEach(item => page.appendChild(item));
                     track.appendChild(page);
+                    pageElements.push(page);
                 }
 
                 viewport.appendChild(track);
@@ -2098,7 +2154,13 @@
                 container.appendChild(shell);
 
                 function updatePage() {
-                    track.style.transform = `translateX(-${currentPage * 100}%)`;
+                    // Account for both the 100% page width and the 80px gap between pages
+                    track.style.transform = `translateX(calc(-${currentPage * 100}% - ${currentPage * 80}px))`;
+                    
+                    pageElements.forEach((pageEl, idx) => {
+                        pageEl.classList.toggle('is-active-page', idx === currentPage);
+                    });
+
                     const dots = dotsWrap.querySelectorAll('.carousel-dot');
                     dots.forEach((d, idx) => d.classList.toggle('active', idx === currentPage));
                 }
@@ -2190,19 +2252,28 @@
         }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
         revealElements.forEach(el => revealObserver.observe(el));
 
-        // --- 7. Single-Row 10-Item Testimonial Carousel ---
-        const testTrack = document.getElementById('testimonial-track');
-        const prevBtn = document.getElementById('test-prev');
-        const nextBtn = document.getElementById('test-next');
-        const dotsContainer = document.getElementById('carousel-dots');
-        const testViewport = document.getElementById('carousel-viewport');
+        // --- 7. Reusable 3-Card Row Carousel Setup (Used for Testimonials [Auto] & Behind The Lens [Manual]) ---
+        function setupThreeCardRowCarousel({
+            trackId,
+            prevId,
+            nextId,
+            dotsId,
+            viewportId,
+            autoPlay = false,
+            autoDelay = 5000
+        }) {
+            const track = document.getElementById(trackId);
+            const prevBtn = document.getElementById(prevId);
+            const nextBtn = document.getElementById(nextId);
+            const dotsContainer = document.getElementById(dotsId);
+            const viewport = document.getElementById(viewportId);
 
-        if (testTrack && prevBtn && nextBtn && dotsContainer) {
-            const testCards = Array.from(testTrack.children);
-            const totalCards = testCards.length;
+            if (!track || !prevBtn || !nextBtn || !dotsContainer || !viewport) return;
+
+            const cards = Array.from(track.children);
+            const totalCards = cards.length;
             let currentIndex = 0;
             let autoPlayTimer = null;
-            const AUTO_DELAY = 5000;
 
             function getCardsPerView() {
                 if (window.innerWidth <= 680) return 1;
@@ -2215,6 +2286,30 @@
                 return Math.max(0, totalCards - visible);
             }
 
+            function updateLayoutAndControls() {
+                const visible = getCardsPerView();
+                // Show arrows and dots ONLY when there are strictly more than 3 cards (and more than visible on screen)
+                const needsCarousel = totalCards > 3 && totalCards > visible;
+
+                if (!needsCarousel) {
+                    track.classList.add('centered-mode');
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                    dotsContainer.style.display = 'none';
+                    currentIndex = 0;
+                    track.style.transform = 'translateX(0px)';
+                    stopTimer();
+                } else {
+                    track.classList.remove('centered-mode');
+                    prevBtn.style.display = 'flex';
+                    nextBtn.style.display = 'flex';
+                    dotsContainer.style.display = 'flex';
+                    renderDots();
+                    updateSlidePosition();
+                    if (autoPlay) startTimer();
+                }
+            }
+
             function renderDots() {
                 dotsContainer.innerHTML = '';
                 const maxIdx = getMaxIndex();
@@ -2222,27 +2317,27 @@
                 for (let i = 0; i < totalDots; i++) {
                     const dot = document.createElement('button');
                     dot.className = `carousel-dot ${i === currentIndex ? 'active' : ''}`;
-                    dot.setAttribute('aria-label', `Navigate to testimonial slide ${i + 1}`);
+                    dot.setAttribute('aria-label', `Slide ${i + 1}`);
                     dot.addEventListener('click', () => {
                         currentIndex = i;
-                        updateCarousel();
-                        resetTimer();
+                        updateSlidePosition();
+                        if (autoPlay) resetTimer();
                     });
                     dotsContainer.appendChild(dot);
                 }
             }
 
-            function updateCarousel() {
+            function updateSlidePosition() {
                 const maxIdx = getMaxIndex();
                 if (currentIndex > maxIdx) currentIndex = maxIdx;
                 if (currentIndex < 0) currentIndex = 0;
 
-                if (testCards[0]) {
-                    const cardRect = testCards[0].getBoundingClientRect();
-                    const trackStyles = window.getComputedStyle(testTrack);
+                if (cards[0]) {
+                    const cardRect = cards[0].getBoundingClientRect();
+                    const trackStyles = window.getComputedStyle(track);
                     const gap = parseFloat(trackStyles.gap) || 28;
                     const shift = (cardRect.width + gap) * currentIndex;
-                    testTrack.style.transform = `translateX(-${shift}px)`;
+                    track.style.transform = `translateX(-${shift}px)`;
                 }
 
                 const allDots = dotsContainer.querySelectorAll('.carousel-dot');
@@ -2254,18 +2349,19 @@
             function advanceNext() {
                 const maxIdx = getMaxIndex();
                 currentIndex = (currentIndex >= maxIdx) ? 0 : currentIndex + 1;
-                updateCarousel();
+                updateSlidePosition();
             }
 
             function advancePrev() {
                 const maxIdx = getMaxIndex();
                 currentIndex = (currentIndex <= 0) ? maxIdx : currentIndex - 1;
-                updateCarousel();
+                updateSlidePosition();
             }
 
             function startTimer() {
+                if (!autoPlay || totalCards <= 3) return;
                 stopTimer();
-                autoPlayTimer = setInterval(advanceNext, AUTO_DELAY);
+                autoPlayTimer = setInterval(advanceNext, autoDelay);
             }
 
             function stopTimer() {
@@ -2276,7 +2372,7 @@
             }
 
             function resetTimer() {
-                startTimer();
+                if (autoPlay) startTimer();
             }
 
             nextBtn.addEventListener('click', () => {
@@ -2289,18 +2385,36 @@
                 resetTimer();
             });
 
-            testViewport.addEventListener('mouseenter', stopTimer);
-            testViewport.addEventListener('mouseleave', startTimer);
+            if (autoPlay) {
+                viewport.addEventListener('mouseenter', stopTimer);
+                viewport.addEventListener('mouseleave', startTimer);
+            }
 
-            window.addEventListener('resize', () => {
-                renderDots();
-                updateCarousel();
-            });
+            window.addEventListener('resize', updateLayoutAndControls);
 
-            renderDots();
-            updateCarousel();
-            startTimer();
+            updateLayoutAndControls();
         }
+
+        // Initialize Testimonials (Auto-Play enabled when > 3 cards, centered & hidden controls when <= 3)
+        setupThreeCardRowCarousel({
+            trackId: 'testimonial-track',
+            prevId: 'test-prev',
+            nextId: 'test-next',
+            dotsId: 'carousel-dots',
+            viewportId: 'carousel-viewport',
+            autoPlay: true,
+            autoDelay: 5000
+        });
+
+        // Initialize Behind The Lens / Blog (Manual only when > 3 cards, centered & hidden controls when <= 3)
+        setupThreeCardRowCarousel({
+            trackId: 'blog-track',
+            prevId: 'blog-prev',
+            nextId: 'blog-next',
+            dotsId: 'blog-dots',
+            viewportId: 'blog-viewport',
+            autoPlay: false
+        });
 
         // --- 8. 3D Tilt Effect ---
         const tiltCards = document.querySelectorAll('.tilt-card');
