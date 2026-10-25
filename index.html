@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wanderlust Pictures | Roaming Through Stories</title>
+    <title>Wanderlust Pictures</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,15 +25,27 @@
         <a href="#hero" class="logo">
             <img src="./assets/Wanderlust logo/WP White logoT.jpg" alt="Wanderlust Pictures Logo">
         </a>
-        <ul class="nav-links">
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#films">Portfolio</a></li>
-            <li><a href="#achievements">Achievements</a></li>
-            <li><a href="#testimonials">Testimonials</a></li>
-            <li><a href="#blog">Blog</a></li>
-        </ul>
-        <a href="#cta" class="btn btn-primary">Let's Create</a>
+        <div class="nav-menu-wrapper" id="nav-menu-wrapper">
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#films">Portfolio</a></li>
+                <li><a href="#achievements">Achievements</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#blog">Blog</a></li>
+            </ul>
+            <div class="mobile-menu-cta">
+                <a href="#cta" class="btn btn-primary">Let's Create</a>
+            </div>
+        </div>
+        <div class="nav-actions">
+            <a href="#cta" class="btn btn-primary desktop-nav-cta">Let's Create</a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+            </button>
+        </div>
     </nav>
 
     <!-- Global Modal Overlay -->
@@ -56,9 +68,8 @@
         </div>
         <div class="hero-content">
             <span class="section-label reveal">AWARD-WINNING FILM PRODUCTION</span>
-            <h1 class="reveal">Cinematic Stories That<br>Leave A Lasting<br>Impression</h1>
-            <p class="reveal">We craft meaningful films, documentaries and visual stories that<br>inspire, connect and
-                travel beyond borders.</p>
+            <h1 class="reveal">Cinematic Stories That<br class="hide-mobile"> Leave A Lasting<br class="hide-mobile"> Impression</h1>
+            <p class="reveal">We craft meaningful films, documentaries and visual stories that<br class="hide-mobile"> inspire, connect and travel beyond borders.</p>
             <div class="hero-buttons reveal">
                 <a href="#films" class="btn btn-primary">View Our Work</a>
                 <a href="#about" class="btn btn-outline">Meet the Team</a>
@@ -100,25 +111,25 @@
             </div>
             <div class="crew-member">
                 <img src="./assets/Member photos/Chapa.jpeg" alt="Chapa Bandara" class="crew-img">
-                <h4>Chapa<br>Bandara</h4>
+                <h4>Chapa Bandara</h4>
                 <span class="role">PRODUCTION MANAGER & MAKEUP ARTIST</span>
                 <p>Coordinates production operations, schedules, and logistics.</p>
             </div>
             <div class="crew-member">
                 <img src="./assets/Member photos/Charuni.jpeg" alt="Charuni Nayanthara" class="crew-img">
-                <h4>Charuni<br>Nayanthara</h4>
+                <h4>Charuni Nayanthara</h4>
                 <span class="role">WRITER</span>
                 <p>Develops engaging stories, screenplays, and creative concepts.</p>
             </div>
             <div class="crew-member">
                 <img src="./assets/Member photos/Daham.jpg" alt="Daham Dissanayake" class="crew-img">
-                <h4>Daham<br>Dissanayake</h4>
+                <h4>Daham Dissanayake</h4>
                 <span class="role">CINEMATOGRAPHER</span>
                 <p>Captures cinematic visuals and oversees camera work.</p>
             </div>
             <div class="crew-member">
                 <img src="./assets/Member photos/Buddhi.jpeg" alt="Buddhi Jayasundara" class="crew-img">
-                <h4>Buddhi<br>Jayasundara</h4>
+                <h4>Buddhi Jayasundara</h4>
                 <span class="role">PHOTOGRAPHER</span>
                 <p>Documents productions through professional photography.</p>
             </div>

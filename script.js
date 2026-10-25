@@ -1,14 +1,70 @@
-// --- 1. Smart Navbar ---
+// --- 1. Smart Navbar & Mobile Menu ---
 let lastScroll = 0;
+const nav = document.getElementById('navbar');
+const navToggle = document.getElementById('nav-toggle');
+const navMenuWrapper = document.getElementById('nav-menu-wrapper');
+
 window.addEventListener('scroll', () => {
-    const nav = document.getElementById('navbar');
+    if (navMenuWrapper && navMenuWrapper.classList.contains('active')) return;
     if (window.scrollY > lastScroll && window.scrollY > 100) {
         nav.classList.add('nav-hidden');
     } else {
         nav.classList.remove('nav-hidden');
     }
     lastScroll = window.scrollY;
-});
+}, { passive: true });
+
+function closeMobileMenu() {
+    if (navToggle) {
+        navToggle.classList.remove('active');
+        navToggle.setAttribute('aria-expanded', 'false');
+    }
+    if (navMenuWrapper) {
+        navMenuWrapper.classList.remove('active');
+    }
+    document.body.style.overflow = '';
+}
+
+function openMobileMenu() {
+    if (navToggle) {
+        navToggle.classList.add('active');
+        navToggle.setAttribute('aria-expanded', 'true');
+    }
+    if (navMenuWrapper) {
+        navMenuWrapper.classList.add('active');
+    }
+    document.body.style.overflow = 'hidden';
+}
+
+if (navToggle && navMenuWrapper) {
+    navToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = navMenuWrapper.classList.contains('active');
+        if (isOpen) {
+            closeMobileMenu();
+        } else {
+            openMobileMenu();
+        }
+    });
+
+    navMenuWrapper.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            closeMobileMenu();
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (navMenuWrapper.classList.contains('active') && !navMenuWrapper.contains(e.target) && !navToggle.contains(e.target)) {
+            closeMobileMenu();
+        }
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navMenuWrapper.classList.contains('active')) {
+            closeMobileMenu();
+        }
+    });
+}
 
 // --- 2. Portfolio Tabs Logic ---
 function switchTab(index) {
@@ -342,8 +398,8 @@ function setupThreeCardRowCarousel({
 
     function updateLayoutAndControls() {
         const visible = getCardsPerView();
-        // Show arrows and dots ONLY when there are strictly more than 3 cards (and more than visible on screen)
-        const needsCarousel = totalCards > 3 && totalCards > visible;
+        // Needs carousel whenever cards exceed visible cards on the current screen size
+        const needsCarousel = totalCards > visible;
 
         if (!needsCarousel) {
             track.classList.add('centered-mode');
@@ -363,6 +419,23 @@ function setupThreeCardRowCarousel({
             if (autoPlay) startTimer();
         }
     }
+
+    // Touch Swipe Support for Mobile & Tablets
+    let touchStartX = 0;
+    let touchEndX = 0;
+    viewport.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].clientX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 40) {
+            if (diff > 0) advanceNext();
+            else advancePrev();
+            resetTimer();
+        }
+    }, { passive: true });
 
     function renderDots() {
         dotsContainer.innerHTML = '';
@@ -398,6 +471,8 @@ function setupThreeCardRowCarousel({
         allDots.forEach((dot, idx) => {
             dot.classList.toggle('active', idx === currentIndex);
         });
+
+        track.dispatchEvent(new CustomEvent('carousel:slide'));
     }
 
     function advanceNext() {
@@ -470,25 +545,147 @@ setupThreeCardRowCarousel({
     autoPlay: false
 });
 
-// --- 8. 3D Tilt Effect ---
-const tiltCards = document.querySelectorAll('.tilt-card');
-tiltCards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = ((y - centerY) / centerY) * -3;
-        const rotateY = ((x - centerX) / centerX) * 12;
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(40px) scale3d(1.035, 1.035, 1.035)`;
+// --- 7b. Testimonials Click & Hover Expansion (Mobile & Desktop) ---
+function initTestimonialExpansion() {
+    const testimonialTrack = document.getElementById('testimonial-track');
+    if (!testimonialTrack) return;
+
+    const cards = Array.from(testimonialTrack.querySelectorAll('.carousel-card'));
+    if (!cards.length) return;
+
+    // Desktop hover devices handle expansion naturally on hover (:hover in CSS).
+    // They should NOT lock or toggle cards open on click.
+    const isDesktopView = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth > 900;
+
+    function toggleCard(cardToToggle) {
+        const isCurrentlyExpanded = cardToToggle.classList.contains('is-expanded');
+
+        // Collapse all other testimonial cards
+        cards.forEach(otherCard => {
+            if (otherCard !== cardToToggle && otherCard.classList.contains('is-expanded')) {
+                otherCard.classList.remove('is-expanded');
+            }
+        });
+
+        // Toggle the targeted card
+        if (isCurrentlyExpanded) {
+            cardToToggle.classList.remove('is-expanded');
+        } else {
+            cardToToggle.classList.add('is-expanded');
+        }
+    }
+
+    cards.forEach(card => {
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+        let touchMovedSignificantly = false;
+        let lastTouchEndTime = 0;
+
+        // Record touch start
+        card.addEventListener('touchstart', (e) => {
+            if (e.touches && e.touches[0]) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                touchStartTime = Date.now();
+                touchMovedSignificantly = false;
+            }
+        }, { passive: true });
+
+        // Detect if touch was an intentional horizontal swipe or vertical page scroll
+        card.addEventListener('touchmove', (e) => {
+            if (e.touches && e.touches[0]) {
+                const dx = Math.abs(e.touches[0].clientX - touchStartX);
+                const dy = Math.abs(e.touches[0].clientY - touchStartY);
+                // Allow up to 20px finger jitter on tap; only flag as swipe/scroll if moved > 20px
+                if (dx > 20 || dy > 20) {
+                    touchMovedSignificantly = true;
+                }
+            }
+        }, { passive: true });
+
+        // Handle touchend for immediate, lag-free mobile tap response
+        card.addEventListener('touchend', () => {
+            if (isDesktopView()) return;
+            const touchDuration = Date.now() - touchStartTime;
+            // If it was a clean tap (didn't drag > 20px and lasted < 500ms)
+            if (!touchMovedSignificantly && touchDuration < 500) {
+                lastTouchEndTime = Date.now();
+                toggleCard(card);
+            }
+        }, { passive: true });
+
+        // Click listener: only activate on mobile/touch devices
+        card.addEventListener('click', () => {
+            // On desktop view, hover expands and collapses automatically.
+            // Do not toggle or keep card expanded on desktop click.
+            if (isDesktopView()) {
+                return;
+            }
+            // Prevent synthetic double-fire within 400ms of a touchend
+            if (Date.now() - lastTouchEndTime < 400) {
+                return;
+            }
+            toggleCard(card);
+        });
     });
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale3d(1, 1, 1)`;
-        card.style.transition = `transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)`;
+
+    // Collapse open cards when navigating the carousel, clicking outside, or resizing to desktop
+    const collapseAll = () => {
+        cards.forEach(card => {
+            if (card.classList.contains('is-expanded')) {
+                card.classList.remove('is-expanded');
+            }
+        });
+    };
+
+    // Close any expanded cards on window resize if transitioned to desktop
+    window.addEventListener('resize', () => {
+        if (isDesktopView()) {
+            collapseAll();
+        }
     });
-    card.addEventListener('mouseenter', () => { card.style.transition = `transform 0.15s ease-out`; });
-});
+
+    // Tap outside to collapse on mobile/touch
+    document.addEventListener('click', (e) => {
+        if (isDesktopView()) return;
+        if (!e.target.closest('.carousel-card') && !e.target.closest('.carousel-arrow') && !e.target.closest('#carousel-dots')) {
+            collapseAll();
+        }
+    });
+
+    const prevBtn = document.getElementById('test-prev');
+    const nextBtn = document.getElementById('test-next');
+    if (prevBtn) prevBtn.addEventListener('click', collapseAll);
+    if (nextBtn) nextBtn.addEventListener('click', collapseAll);
+    const dotsWrap = document.getElementById('carousel-dots');
+    if (dotsWrap) dotsWrap.addEventListener('click', collapseAll);
+    testimonialTrack.addEventListener('carousel:slide', collapseAll);
+}
+
+initTestimonialExpansion();
+
+// --- 8. 3D Tilt Effect (Only on desktop / hover-capable devices) ---
+if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const tiltCards = document.querySelectorAll('.tilt-card');
+    tiltCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -3;
+            const rotateY = ((x - centerX) / centerX) * 12;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(40px) scale3d(1.035, 1.035, 1.035)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale3d(1, 1, 1)`;
+            card.style.transition = `transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)`;
+        });
+        card.addEventListener('mouseenter', () => { card.style.transition = `transform 0.15s ease-out`; });
+    });
+}
 
 // --- 9. Three.js Volumetric Smoke Setup ---
 const canvas = document.getElementById('bg-canvas');
@@ -561,5 +758,6 @@ animate();
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
